@@ -1,0 +1,24 @@
+# R
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*~
+
+# Large / derived binaries (keep source data tracked; ignore caches)
+*.tmp
+*.log
+
+# Office lock files
+~$*
+
+# Quarto / pandoc render artifacts (regenerate from the .md + .bib)
+.quarto/
+_freeze/
+protocol/*_files/
+protocol/*.html
+protocol/*.pdf
