@@ -4,19 +4,39 @@
 .Rproj.user/
 *.Rproj
 
-# OS / editor
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.env
+
+# Typst compilation output
+manuscript.pdf
+*.typst-tmp/
+
+# OS / editor / AI agents
 .DS_Store
 Thumbs.db
 *~
+*.swp
+*.swo
+.vscode/
+.idea/
+.claude/
+.gemini/
+.agents/
 
-# Large / derived binaries (keep source data tracked; ignore caches)
+# Office lock files & scratch
+~$*
 *.tmp
 *.log
 
-# Office lock files
-~$*
-
-# Quarto / pandoc render artifacts (regenerate from the .md + .bib)
+# Quarto / pandoc render artifacts
 .quarto/
 _freeze/
 protocol/*_files/
