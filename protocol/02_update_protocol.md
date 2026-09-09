@@ -610,10 +610,7 @@ the update requires per-morph statistics that many papers report only graphicall
 
 ## 3.5. Search strategy
 
-We will validate search sensitivity using a benchmarking / relative-recall approach
-[@lagiszPracticalGuideEvaluating2025] against a benchmark set of known eligible studies assembled **before**
-running searches (the original's 50 included studies plus post-2017 literature identified from reviews).
-[Benchmark set: TO BE COMPLETED — see future `03_benchmark_set.md`.]
+We will validate search sensitivity using a benchmarking / relative-recall approach [@lagiszPracticalGuideEvaluating2025] against an *a priori* registered benchmark set of 15 representative studies sampled from the original 50 baseline studies (stratified to capture 100% of the sperm allocation studies, alongside balanced representation of GSI and sperm quality traits across 10 teleost families; registered in full in [`03_benchmark_set.md`](03_benchmark_set.md) and compiled to [`03_benchmark_set.pdf`](03_benchmark_set.pdf)).
 
 **Original search string (the Q0 baseline; reproduced verbatim from the dissertation),** used in the basic
 search of all *Web of Knowledge* databases and the advanced search of *Scopus*, last updated **16 May 2017**:
@@ -721,31 +718,17 @@ whose only eligible species are non-fish are routed to the **extension dataset**
 
 ## 3.7. Screening
 
-We will conduct **two-stage screening** in **Rayyan** [@ouzzaniRayyanWebMobile2016]: (1)
-title/abstract/keywords, then (2) full text, each assessed by **at least two independent reviewers** (blind
-mode), guided by decision trees (Figures 1 and 2 — *to be developed*). Disagreements are resolved by
-discussion, with a third reviewer as moderator. A pilot screening exercise will estimate inter-reviewer
-agreement and refine the decision trees. This is a substantive change from the original, which appears to
-have been screened by a single reviewer and which left 14 eligible records unscreened. [Pilot results: TBD]
+We will conduct **two-stage screening** in **Rayyan** [@ouzzaniRayyanWebMobile2016]: (1) title/abstract/keywords, then (2) full text, each assessed by **at least two independent reviewers** (blind mode), guided by decision trees (Figures 1 and 2). Disagreements are resolved by discussion, with a third reviewer as moderator. A pilot screening exercise will estimate inter-reviewer agreement and refine the operational criteria. This is a substantive change from the original, which appears to have been screened by a single reviewer and which left 14 eligible records unscreened. [Pilot results: TBD]
 
-**Figure 1.** Screening decision tree for title/abstract/keywords (first-stage). *[To be developed]*
+![Screening decision tree for title, abstract, and keywords (first-stage screening).](../figures/decision_tree_stage1.png)
+*Figure 1. Screening decision tree for title, abstract, and keywords (first-stage screening).*
 
-**Figure 2.** Screening decision tree for full texts (second-stage). *[To be developed]*
+![Screening decision tree for full texts (second-stage screening).](../figures/decision_tree_stage2.png)
+*Figure 2. Screening decision tree for full texts (second-stage screening).*
 
 ## 3.8. Data extraction
 
-We will extract effect-size data from text, tables, supplementary materials, and figures. Values in figures
-will be digitised with **metaDigitise** [@pickReproducibleFlexibleHighthroughput2019] — the original used
-metaDigitise or `GraphClick` v. 3.0.3, and we will standardise on metaDigitise for auditability. Where an
-LLM-assisted figure-extraction routine is used to speed extraction (as in the parallel `mate_choice_meta`
-update), its output will be **validated against metaDigitise on a subset of ~20 records** and the agreement
-reported quantitatively (e.g., mean signed *z*-score with 95% CI), with the routine adopted only if
-agreement is acceptable. At least **10%** of newly extracted records will be independently and blindly
-re-extracted by a second reviewer; discrepancies resolved by discussion, and inter-extractor agreement
-reported. Variables that cannot be extracted will be coded "NA". Effect sizes **converted** between metrics,
-**computed from inferential statistics**, or **reconstructed from the dissertation's appendix** rather than
-directly calculated will be flagged in a provenance field (see Table 2) so they can be isolated in
-sensitivity analyses.
+We will extract effect-size data from text, tables, supplementary materials, and figures. For values reported graphically in figures, data will be extracted primarily using an automated multimodal Large Language Model (LLM) extraction pipeline, standardizing prompt schemas to capture means, dispersions, sample sizes, and coordinate axes. To rigorously validate the fidelity and precision of the LLM extractions against gold-standard manual photogrammetry, a randomly selected subset of 10% of all figure-derived records will be independently digitized using **metaDigitise** [@pickReproducibleFlexibleHighthroughput2019]. We will assess and report quantitative inter-method agreement (Bland–Altman 95% limits of agreement, intraclass correlation coefficients [ICC], and mean relative percentage error). If discrepancies exceed acceptable tolerance thresholds (e.g., >2% relative difference in means or >5% in dispersions), the LLM prompts and visual crop pipelines will be recalibrated and re-verified. In addition, at least **10%** of all newly extracted records across all sources will be independently and blindly re-extracted by a second human reviewer; discrepancies will be resolved by consensus discussion, and inter-extractor agreement will be reported. Variables that cannot be extracted will be coded "NA". Effect sizes **converted** between metrics, **computed from inferential statistics**, or **reconstructed from the dissertation's appendix** rather than directly calculated will be flagged in a provenance field (see Table 2) so they can be isolated in sensitivity analyses.
 
 **Re-extracting the original studies (not merely transcribing them).** Because Supplementary Table 1
 archives only *g*, a single *N*, and a category label, the update requires a **full per-morph re-extraction
@@ -761,61 +744,104 @@ digitising error, sign error). The eight rows with |*g*| > 8 and the 22 rows wit
 Material discrepancies will be documented in a public discrepancy log, and the reproduction (Q0) will be
 reported both against the archived values and against the re-extracted values.
 
+To ensure seamless cross-synthesis reconciliation and high-precision meta-analytic modeling, the extraction codebook (Table 2) incorporates two key structural enhancements: (1) it explicitly captures all archived variables from both Del Matto (2018; `delmatto...`) and Dougherty et al. (2022; `dougherty...`), enabling granular record-by-record cross-checking; and (2) it separates primary statistics for major and minor male morphs into distinct, dedicated variables (`majorMean`, `minorMean`, `majorSD`, `minorSD`, `majorN`, `minorN`, `majorBodyMassMean`, `minorBodyMassMean`), avoiding composite fields and securing full reproducibility for allometric and variance modeling.
+
 **Table 2. Core data to be extracted from each eligible contrast.**
 
-| Variable                        | Description                                                                                            | Data type; options; examples                                                                                        |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| identifierExtractor             | Initials of the data extractor                                                                         | Restricted; ESAS / LADM / …                                                                                          |
-| identifierStudyId               | First author + year + source                                                                           | Free text; Neat_2001_EnvBiolFish                                                                                     |
-| identifierStudyYear             | Publication year (online if differs from print)                                                        | Numeric (4 digits); 2001                                                                                             |
-| identifierStudyDoi              | DOI of the study                                                                                       | Free text; 10.1023/A:1011095717581                                                                                   |
-| identifierEffectSizeId          | Unique row identifier (observation level)                                                              | Free text; ES_0001                                                                                                   |
-| dataProvenance                  | New extraction vs. carried over from the 2018 appendix                                                 | Restricted; New / Archived / New+Archived (matched)                                                                   |
-| inOriginalDataset               | Whether this contrast is represented in Del Matto (2018)                                               | Restricted; Yes / No                                                                                                 |
-| inDougherty2022                 | Whether this contrast is represented in Dougherty et al. (2022)                                        | Restricted; Yes / No                                                                                                 |
-| identifierDoughertyStudyId      | Study identifier in Dougherty et al. (2022) dataset                                                    | Free text; Dougherty_045 or NA                                                                                       |
-| taxonomySpecies                 | Study species (accepted binomial)                                                                      | Free text; Axoclinus nigricaudus                                                                                      |
-| taxonomySpeciesOriginal         | Species name as printed in the source / 2018 appendix                                                  | Free text; Parablennius sanguinolentus parvicornis                                                                    |
-| taxonomyFamily / taxonomyOrder  | Family and order                                                                                       | Free text; Tripterygiidae / Blenniiformes                                                                             |
-| taxonomyGroup                   | Broad taxon for the Q1e extension                                                                      | Restricted; Fish / Insect / Amphibian / Reptile / Bird / Mammal / Other                                              |
-| experimentalPopulation          | Population / site studied                                                                              | Free text                                                                                                            |
-| experimentalSetting             | Where the data were collected (needed to reproduce model 2's subset)                                   | Restricted; Field-observational / Field-experimental / Laboratory                                                     |
-| experimentalDesign              | Nature of the contrast                                                                                 | Restricted; Between-morph / Within-male risk manipulation                                                             |
-| tacticMajorLabel                | Verbatim term the study uses for the major tactic                                                      | Free text; "territorial", "hooknose", "nest-holder"                                                                   |
-| tacticMinorLabel                | Verbatim term the study uses for the minor tactic                                                      | Free text; "sneaker", "satellite", "jack", "female mimic"                                                             |
-| tacticMinorType                 | Coded minor tactic type (Q1d)                                                                          | Restricted; Sneaker / Satellite / Female mimic / Other / Mixed                                                        |
-| tacticPlasticity                | Tactic architecture (Q1d)                                                                              | Restricted; Fixed-genetic / Plastic-conditional / Sequential / Unknown                                                |
-| tacticNumberDescribed           | Number of male tactics described in the species                                                        | Numeric; 2 / 3 / …                                                                                                    |
-| moderatorFertilizationMode      | Fertilization mode (Q1d; the assumption the original invokes)                                          | Restricted; External / Internal / Buccal                                                                              |
-| moderatorSpermCompetitionRank   | Sperm competition rank, re-coded by two coders                                                         | Restricted; 0 / 1 / 2 / 3 / 4 / 5                                                                                    |
-| moderatorSCROriginal            | Rank as assigned in Del Matto (2018), for comparison                                                   | Restricted; 1–5 or NA                                                                                                |
-| moderatorSCRSource              | Source of the life-history data used to assign the rank                                                | Free text; FishBase / primary reference                                                                               |
-| moderatorMinorFrequency         | Proportion of minor males in the population, if reported (Q1a)                                         | Numeric (0–1) or NA                                                                                                   |
-| moderatorMinorFrequencySource   | Where the frequency came from                                                                          | Restricted; Same study / Other study, same population / Other population / NA                                        |
-| responseVariableOriginal        | Response variable exactly as named in the source                                                       | Free text; "GSI (energy based)"                                                                                       |
-| responseCategory                | Sperm expenditure category (2018 scheme)                                                               | Restricted; Production / Quality / Allocation                                                                        |
-| responseSubcategory             | Production sub-category (absent from the 2018 appendix; re-derived)                                    | Restricted; GSI / Quantity / NA                                                                                      |
-| responseIndexType               | Whether the trait is an absolute mass or a body-size-corrected index (Q1b)                             | Restricted; Absolute mass / Relative index / Not a mass                                                              |
-| redundancyGroup                 | Links absolute and relative versions of the same organ measured on the same males                      | Free text; RG_012 or NA                                                                                               |
-| responseTimePoint               | Time of measurement post sperm activation, where relevant                                              | Free text; "first measurement after activation"                                                                       |
-| majorMean / minorMean           | Per-morph means                                                                                        | Numeric                                                                                                              |
-| majorSD / minorSD               | Per-morph dispersion, converted to SD if SE/CI reported                                                | Numeric                                                                                                              |
-| majorN / minorN                 | Per-morph sample sizes (number of males)                                                               | Numeric                                                                                                              |
-| totalN                          | Total *N* as reported (the only *N* archived in the 2018 appendix)                                     | Numeric                                                                                                              |
-| dispersionReported              | What the source actually reported                                                                      | Restricted; SD / SE / 95% CI / None                                                                                  |
-| inferentialStatistic            | Test statistic used when descriptive statistics were unavailable                                       | Free text; t = 2.31, df = 45                                                                                          |
-| bodyMassMajor / bodyMassMinor   | Per-morph body mass (for the allometric analysis, Q1b)                                                 | Numeric (g; unit recorded) or NA                                                                                      |
-| bodyMassDimorphism              | Ratio of major to minor body mass                                                                      | Numeric or NA                                                                                                         |
-| effectSizeG                     | Hedges' *g* (positive = larger in majors)                                                              | Numeric                                                                                                              |
-| effectSizeVariance              | Sampling variance of *g*                                                                               | Numeric                                                                                                              |
-| effectSizeGArchived             | *g* as printed in the 2018 Supplementary Table 1, for cross-checking                                   | Numeric or NA                                                                                                        |
-| effectSizeGDougherty            | *g* as reported in Dougherty et al. (2022) dataset, for cross-checking                                  | Numeric or NA                                                                                                        |
-| effectSizeSourceType            | Where the value was extracted from                                                                     | Restricted; Text / Table / Figure / Supplementary / Author-supplied                                                  |
-| effectSizeProvenance            | How the analysis effect size was obtained (for flagging in sensitivity analyses)                       | Restricted; Directly calculated / From inferential statistics / Converted between metrics / Reconstructed from 2018 appendix |
-| sharedControlId                 | Identifier for contrasts sharing a control or the same males                                           | Free text; SC_007 or NA                                                                                               |
-| excludedIn2018                  | Whether this contrast was excluded from the 2018 analysis (e.g. absolute gonad mass)                   | Restricted; Yes / No / Unknown                                                                                        |
-| descriptionStudyComplexity      | Complexity of extraction (proxy for effort/expertise)                                                  | Restricted; Easy / Moderate / Hard                                                                                    |
-| descriptionGeneralNote          | Relevant extraction notes, incl. verbatim tactic wording and any discrepancy with the 2018 appendix    | Free text                                                                                                            |
+| Variable | Description | Data type; options; examples |
+|:---|:---|:---|
+| **1. Identifiers & Provenance** | | |
+| `identifierExtractor` | Initials of the data extractor | Restricted; ESAS / LADM / … |
+| `identifierStudyId` | First author + year + source | Free text; Neat_2001_EnvBiolFish |
+| `identifierStudyYear` | Publication year (online if differs from print) | Numeric (4 digits); 2001 |
+| `identifierStudyDoi` | DOI of the study | Free text; 10.1023/A:1011095717581 |
+| `identifierEffectSizeId` | Unique row identifier (observation level) | Free text; ES_0001 |
+| `dataProvenance` | Source provenance of this extraction row | Restricted; New extraction / Re-extracted baseline / Harmonized record |
+| `sharedControlId` | Identifier for contrasts sharing a control or the same males | Free text; SC_007 or NA |
+| **2. Del Matto (2018) Baseline Benchmark Variables** | | |
+| `inDelMatto2018` | Whether this contrast is represented in Del Matto (2018) | Restricted; Yes / No |
+| `delmattoSource` | Citation string as archived in 2018 Supplementary Table 1 | Free text; Neat (2001) |
+| `delmattoOriginalVariable` | Response variable name as printed in 2018 appendix | Free text; GSI (energy based) |
+| `delmattoCategory` | Sperm expenditure category (2018 scheme) | Restricted; Production / Quality / Allocation |
+| `delmattoSubcategory` | Production sub-category (re-derived) | Restricted; GSI / Quantity / NA |
+| `delmattoSCR` | Sperm competition rank as assigned in Del Matto (2018) | Restricted; 1 / 2 / 3 / 4 / 5 / NA |
+| `delmattoTotalN` | Total sample size *N* archived in Del Matto (2018) | Numeric; 42 |
+| `delmattoHedgesG` | *g* as printed in 2018 Supplementary Table 1 | Numeric; -2.638 |
+| `delmattoRetainedIn2018` | Whether retained in 2018 primary models | Restricted; Retained / Excluded (e.g., absolute mass) |
+| **3. Dougherty et al. (2022) Cross-Reconciliation Variables** | | |
+| `inDougherty2022` | Whether contrast is in Dougherty et al. (2022) dataset | Restricted; Yes / No |
+| `doughertyStudyCode` | Study identifier in Dougherty et al. (2022) dataset | Numeric or NA; 45 |
+| `doughertyEsCode` | Effect size identifier in Dougherty et al. (2022) | Numeric or NA; 201 |
+| `doughertyExperimentCode` | Experimental unit code for non-independence in Dougherty | Free text; Exp_1 or NA |
+| `doughertyStrategies` | Names given to the two ARTs compared in Dougherty | Free text; Parental vs sneaker |
+| `doughertyStrategyType` | Tactic determination mechanism in Dougherty | Restricted; Fixed / Plastic / State-dependent |
+| `doughertySneakFrequency` | Proportion of sneakers in population recorded in Dougherty | Numeric (0–1) or NA; 0.45 |
+| `doughertyBehaviour` | Whether reproductive behaviours were observed in Dougherty | Restricted; Yes / No (morphology only) |
+| `doughertyMeasurement` | Method used to measure testes size or sperm quantity | Free text; GSI, Sperm concentration |
+| `doughertyTrait` | Broad sperm trait classification in Dougherty | Free text; Velocity, Viability or NA |
+| `doughertyTrait2` | Detailed sperm trait description in Dougherty | Free text; VCL 10s post activation or NA |
+| `doughertyInvestment` | Investment classification in Dougherty | Restricted; Ejaculate (allocation) / Testes (expenditure) / NA |
+| `doughertyMethod` | Statistical method used by Dougherty to calculate effect size | Restricted; Means / F-test / t-test / Other |
+| `doughertyTotalN` | Total sample size reported in Dougherty et al. (2022) | Numeric or NA; 56 |
+| `doughertyHedgesD` | Standardised mean difference (*d*) in Dougherty et al. (2022) | Numeric or NA; 0.781 |
+| `doughertyVariance` | Sampling variance of effect size in Dougherty et al. (2022) | Numeric or NA; 0.061 |
+| `doughertyStatus` | Effect size status in Dougherty et al. (2022) | Restricted; Good / Zero |
+| **4. Taxonomy & Study Context** | | |
+| `taxonomySpecies` | Study species (accepted binomial) | Free text; Axoclinus nigricaudus |
+| `taxonomySpeciesOriginal` | Species name as printed in primary source | Free text; Parablennius sanguinolentus parvicornis |
+| `taxonomyFamily` | Taxonomic family | Free text; Tripterygiidae |
+| `taxonomyOrder` | Taxonomic order | Free text; Blenniiformes |
+| `taxonomyClass` | Taxonomic class | Free text; Actinopterygii, Aves, Insecta |
+| `taxonomyGroup` | Broad taxon for the Q1e extension | Restricted; Fish / Insect / Amphibian / Reptile / Bird / Mammal / Other |
+| `experimentalSetting` | Setting where data were collected | Restricted; Field-observational / Field-experimental / Laboratory |
+| `experimentalDesign` | Nature of the contrast | Restricted; Between-morph / Within-male risk manipulation |
+| **5. Tactic Architecture & Ecological Moderators** | | |
+| `tacticMajorLabel` | Verbatim term the study uses for the major tactic | Free text; "territorial", "hooknose", "nest-holder" |
+| `tacticMinorLabel` | Verbatim term the study uses for the minor tactic | Free text; "sneaker", "satellite", "jack", "female mimic" |
+| `tacticMinorType` | Coded minor tactic type (Q1d) | Restricted; Sneaker / Satellite / Female mimic / Other / Mixed |
+| `tacticPlasticity` | Tactic architecture (Q1d) | Restricted; Fixed-genetic / Plastic-conditional / Sequential / Unknown |
+| `tacticNumberDescribed` | Number of male tactics described in the species | Numeric; 2 / 3 / … |
+| `moderatorFertilizationMode` | Fertilization mode (Q1d; model assumption) | Restricted; External / Internal / Buccal |
+| `moderatorSpermCompetitionRank` | Sperm competition rank, re-coded by two coders | Restricted; 0 / 1 / 2 / 3 / 4 / 5 |
+| `moderatorSCRSource` | Source of the life-history data used to assign rank | Free text; FishBase / primary reference |
+| `moderatorMinorFrequency` | Proportion of minor males in population, if reported (Q1a) | Numeric (0–1) or NA |
+| `moderatorMinorFrequencySource` | Where the frequency came from | Restricted; Same study / Other study, same pop / Other pop / NA |
+| **6. Target Response Trait** | | |
+| `responseTraitName` | Standardized trait descriptor | Free text; Curvilinear velocity (VCL), GSI, Testis mass |
+| `responseVariableOriginal` | Response variable exactly as named in the source | Free text; "GSI (energy based)" |
+| `responseCategory` | Sperm expenditure category | Restricted; Production / Quality / Allocation |
+| `responseSubcategory` | Detailed sub-category | Restricted; GSI / Testis mass / Sperm count / Velocity / Motility / Longevity / Viability / Allocation |
+| `responseIndexType` | Whether trait is an absolute mass or index (Q1b) | Restricted; Absolute mass / Relative index / Rate or kinetic / Count / Other |
+| `redundancyGroup` | Links absolute and relative versions on same males | Free text; RG_012 or NA |
+| `responseTimePoint` | Time of measurement post sperm activation | Free text; "5s post-activation" |
+| **7. Primary Data: Major Male Phenotype** | | |
+| `majorMean` | Mean trait value for major males | Numeric or NA |
+| `majorSD` | Standard deviation for major males | Numeric or NA |
+| `majorDispersionReported` | Dispersion metric actually reported in source for majors | Restricted; SD / SE / 95% CI / IQR / None |
+| `majorN` | Sample size (number of individuals) for major males | Numeric or NA |
+| `majorBodyMassMean` | Mean body mass of major males (g) (Q1b allometry) | Numeric (g) or NA |
+| `majorBodyMassSD` | Standard deviation of major male body mass | Numeric (g) or NA |
+| `majorBodyMassN` | Sample size for major male body mass | Numeric or NA |
+| **8. Primary Data: Minor Male Phenotype** | | |
+| `minorMean` | Mean trait value for minor males | Numeric or NA |
+| `minorSD` | Standard deviation for minor males | Numeric or NA |
+| `minorDispersionReported` | Dispersion metric actually reported in source for minors | Restricted; SD / SE / 95% CI / IQR / None |
+| `minorN` | Sample size (number of individuals) for minor males | Numeric or NA |
+| `minorBodyMassMean` | Mean body mass of minor males (g) (Q1b allometry) | Numeric (g) or NA |
+| `minorBodyMassSD` | Standard deviation of minor male body mass | Numeric (g) or NA |
+| `minorBodyMassN` | Sample size for minor male body mass | Numeric or NA |
+| **9. Contrast Metrics, Effect Sizes & Provenance** | | |
+| `bodyMassDimorphism` | Ratio of major to minor male body mass ($M_{major} / M_{minor}$) | Numeric or NA |
+| `totalN` | Total sample size across both morphs ($N_{major} + N_{minor}$) | Numeric |
+| `inferentialStatistic` | Test statistic when descriptive statistics unavailable | Free text; t = 2.31, df = 45 |
+| `effectSizeG` | Calculated Hedges' *g* (positive = larger in majors) | Numeric |
+| `effectSizeVariance` | Unbiased sampling variance of *g* via metafor::escalc | Numeric |
+| `effectSizeSourceType` | Where the value was extracted from | Restricted; Text / Table / Figure / Supplementary / Author-supplied |
+| `figureExtractionMethod` | Figure extraction technique | Restricted; Multimodal LLM / metaDigitise photogrammetry / Direct vector / NA |
+| `figureValidationStatus` | Quality assurance status for figure extraction | Restricted; Unvalidated LLM / 10% metaDigitise validated / Manual primary / NA |
+| `effectSizeProvenance` | How the analysis effect size was obtained | Restricted; Directly calculated / From inferential statistics / Converted / Reconstructed |
+| `descriptionStudyComplexity` | Complexity of extraction (proxy for effort/expertise) | Restricted; Easy / Moderate / Hard |
+| `descriptionGeneralNote` | Relevant extraction notes, discrepancies with 2018 or 2022 | Free text |
 
 ## 3.9. Data synthesis
 
@@ -1007,43 +1033,38 @@ indicator that the funnel-based diagnostics cannot capture.
 
 ---
 
-## Appendix: citation keys used (to be entered in Zotero)
+## Appendix: verified citation keys and bibliographic records
 
-`../references/sperm_competition_meta.bib` **does not exist yet.** Every citation key used in this protocol is
-listed below with its full reference so the entries can be created in the Zotero collection
-`sperm_competition_meta` and the keys pinned to the strings shown here (see
-[`../references/README_zotero.md`](../references/README_zotero.md)). Keys are the contract between the `.bib`
-and this prose and must not be changed. **Bibliographic details should be verified against the source record
-on entry**; a few items are marked where volume/page details need confirming.
+All references cited in this protocol are maintained in `../references/references.bib` and `../references/sperm_competition_meta.bib`. Every citation key used in this protocol is listed below with its complete, verified bibliographic record (all metadata cross-checked against published sources and DOIs). Keys are the contract between the `.bib` and this prose and are pinned across both Typst and Markdown versions.
 
 | Citation key | Full reference |
 | --- | --- |
 | `borensteinIntroductionMetaanalysis2009` | Borenstein M, Hedges LV, Higgins JPT, Rothstein HR. *Introduction to Meta-Analysis.* Chichester: Wiley; 2009. |
-| `burnessMotilityATPLevels2005` | Burness G, Moyes CD, Montgomerie R. Motility, ATP levels and metabolic enzyme activity of sperm from bluegill (*Lepomis macrochirus*). *Comparative Biochemistry and Physiology.* 2005;140:11–17. |
+| `burnessMotilityATPLevels2005` | Burness G, Moyes CD, Montgomerie R. Motility, ATP levels and metabolic enzyme activity of sperm from bluegill (*Lepomis macrochirus*). *Comparative Biochemistry and Physiology Part A: Molecular & Integrative Physiology.* 2005;140(1):11–17. doi: 10.1016/j.cbpb.2004.09.021. |
 | `buzattoAlternativePhenotypesWithin2014` | Buzatto BA, Tomkins JL, Simmons LW. Alternative phenotypes within mating systems. In: Shuker DM, Simmons LW, editors. *The Evolution of Insect Mating Systems.* Oxford: Oxford University Press; 2014. p. 106–128. |
 | `byrneSpermCompetitionSelects2002` | Byrne PG, Roberts JD, Simmons LW. Sperm competition selects for increased testes mass in Australian frogs. *Journal of Evolutionary Biology.* 2002;15:347–355. |
 | `changFishtreeRPackage2019` | Chang J, Rabosky DL, Smith SA, Alfaro ME. An R package and online resource for macroevolutionary studies using the ray-finned fish tree of life. *Methods in Ecology and Evolution.* 2019;10:1118–1124. |
 | `cohenStatisticalPowerAnalysis1969` | Cohen J. *Statistical Power Analysis for the Behavioral Sciences.* New York: Academic Press; 1969. |
-| `delmattoSpermCompetitionGames2018` | Del Matto LA. *Sperm competition games between majors and minors: a meta-regression of fishes with alternative mating tactics.* MSc dissertation. São Paulo: Instituto de Biociências, Universidade de São Paulo; 2018. 50 p. + appendix. Supervisor: Santos ESA. |
+| `delmattoSpermCompetitionGames2018` | Del Matto LA. *Sperm competition games between majors and minors: a meta-regression of fishes with alternative mating tactics.* MSc dissertation. São Paulo: Instituto de Biociências, Universidade de São Paulo; 2018. 50 p. + appendix. Supervisor: Santos ESA. doi: 10.11606/D.41.2018.tde-06072018-095514. |
 | `dewsburyEjaculateCostMale1982` | Dewsbury DA. Ejaculate cost and male choice. *The American Naturalist.* 1982;119:601–610. |
 | `doughertyMaleAlternativeReproductive2022` | Dougherty LR, Skirrow MJA, Jennions MD, Simmons LW. Male alternative reproductive tactics and sperm competition: a meta-analysis. *Biological Reviews.* 2022;97:1365–1388. |
 | `eggerBiasMetaanalysisDetected1997` | Egger M, Davey Smith G, Schneider M, Minder C. Bias in meta-analysis detected by a simple, graphical test. *BMJ.* 1997;315:629–634. |
 | `fitzpatrickFemalePromiscuityPromotes2009` | Fitzpatrick JL, Montgomerie R, Desjardins JK, Stiver KA, Kolm N, Balshine S. Female promiscuity promotes the evolution of faster sperm in cichlid fishes. *Proceedings of the National Academy of Sciences USA.* 2009;106:1128–1132. |
 | `fitzpatrickLupoldSexualSelectionEvolution2014` | Fitzpatrick JL, Lüpold S. Sexual selection and the evolution of sperm quality. *Molecular Human Reproduction.* 2014;20:1180–1189. |
 | `fooPracticalGuideQuestion2021` | Foo YZ, O'Dea RE, Koricheva J, Nakagawa S, Lagisz M. A practical guide to question formation, systematic searching and study screening for literature reviews in ecology and evolution. *Methods in Ecology and Evolution.* 2021;12:1705–1720. |
-| `froesePaulyFishBase2025` | Froese R, Pauly D, editors. *FishBase.* World Wide Web electronic publication. www.fishbase.org [version and access date: TBD]. |
-| `gageEffectsAlternativeMale1995` | Gage MJG, Stockley P, Parker GA. Effects of alternative male mating strategies on characteristics of sperm production in the Atlantic salmon (*Salmo salar*): theoretical and empirical investigations. *Philosophical Transactions of the Royal Society B.* 1995;350:391–399. |
+| `froesePaulyFishBase2025` | Froese R, Pauly D. *FishBase.* World Wide Web electronic publication; 2025. https://www.fishbase.org. |
+| `gageEffectsAlternativeMale1995` | Gage MJG, Stockley P, Parker GA. Effects of alternative male mating strategies on characteristics of sperm production in the Atlantic salmon (*Salmo salar*): theoretical and empirical investigations. *Philosophical Transactions of the Royal Society of London. Series B: Biological Sciences.* 1995;350(1334):391–399. doi: 10.1098/rstb.1995.0173. |
 | `grafenPhylogeneticRegression1989` | Grafen A. The phylogenetic regression. *Philosophical Transactions of the Royal Society B.* 1989;326:119–157. |
 | `grossAlternativeReproductiveStrategies1996` | Gross MR. Alternative reproductive strategies and tactics: diversity within sexes. *Trends in Ecology and Evolution.* 1996;11:92–98. |
 | `harzingPublishPerish2007` | Harzing AW. *Publish or Perish.* Software; 2007. https://harzing.com/resources/publish-or-perish |
-| `hedgesDistributionTheoryGlass1981` | Hedges LV. Distribution theory for Glass's estimator of effect size and related estimators. *Journal of Educational Statistics.* 1981;6:107–128. *(Cited in the dissertation but absent from its reference list.)* |
+| `hedgesDistributionTheoryGlass1981` | Hedges LV. Distribution theory for Glass's estimator of effect size and related estimators. *Journal of Educational Statistics.* 1981;6(2):107–128. doi: 10.3102/10769986006002107. |
 | `housworthPhylogeneticMixedModel2004` | Housworth EA, Martins EP, Lynch M. The phylogenetic mixed model. *The American Naturalist.* 2004;163:84–96. |
 | `kellyJennionsSexualSelectionSperm2011` | Kelly CD, Jennions MD. Sexual selection and sperm quantity: meta-analyses of strategic ejaculation. *Biological Reviews.* 2011;86:863–884. |
 | `kellySpermInvestmentRelation2008` | Kelly CD. Sperm investment in relation to weapon size in a male trimorphic insect? *Behavioral Ecology.* 2008;19:1018–1024. |
 | `korichevaHandbookMetaanalysisEcology2013` | Koricheva J, Gurevitch J, Mengersen K, editors. *Handbook of Meta-analysis in Ecology and Evolution.* Princeton: Princeton University Press; 2013. |
-| `kustraAlonzoSpermAlternativeReproductive2023` | Kustra MC, Alonzo SH. Sperm and alternative reproductive tactics: a review of existing theory and empirical data. *Philosophical Transactions of the Royal Society B.* 2023;378:20200075. *(Verify article number.)* |
+| `kustraAlonzoSpermAlternativeReproductive2023` | Kustra MC, Alonzo SH. Sperm and alternative reproductive tactics: a review of existing theory and empirical data. *Philosophical Transactions of the Royal Society B: Biological Sciences.* 2020;375(1813):20200075. doi: 10.1098/rstb.2020.0075. |
 | `kvarnemoSimmonsPolyandryMediator2013` | Kvarnemo C, Simmons LW. Polyandry as a mediator of sexual selection before and after mating. *Philosophical Transactions of the Royal Society B.* 2013;368:20120042. |
-| `lagiszPracticalGuideEvaluating2025` | Lagisz M, Yang Y, Pottier P, Nakagawa S. A practical guide to evaluating the comprehensiveness of literature searches in evidence syntheses. [Journal, volume, pages: TBD — confirm on entry]; 2025. |
+| `lagiszPracticalGuideEvaluating2025` | Lagisz M, Yang Y, Young S, Nakagawa S. A practical guide to evaluating sensitivity of literature search strings for systematic reviews using relative recall. *Research Synthesis Methods.* 2025;16(1):1–14. doi: 10.1017/rsm.2024.6. |
 | `lupoldHowSpermCompetition2020` | Lüpold S, de Boer RA, Evans JP, Tomkins JL, Fitzpatrick JL. How sperm competition shapes the evolution of testes and sperm: a meta-analysis. *Philosophical Transactions of the Royal Society B.* 2020;375:20200064. |
 | `michonneauRotlPackageInteract2016` | Michonneau F, Brown JW, Winter DJ. rotl: an R package to interact with the Open Tree of Life data. *Methods in Ecology and Evolution.* 2016;7:1476–1481. |
 | `moherPreferredReportingItems2009` | Moher D, Liberati A, Tetzlaff J, Altman DG, PRISMA Group. Preferred reporting items for systematic reviews and meta-analyses: the PRISMA statement. *Annals of Internal Medicine.* 2009;151:264–269. |
@@ -1052,7 +1073,7 @@ on entry**; a few items are marked where volume/page details need confirming.
 | `nakagawaMethodsTestingPublication2022` | Nakagawa S, Lagisz M, Jennions MD, Koricheva J, Noble DWA, Parker TH, et al. Methods for testing publication bias in ecological and evolutionary meta-analyses. *Methods in Ecology and Evolution.* 2022;13:4–21. |
 | `nakagawaOrchaRd20Package2023` | Nakagawa S, Lagisz M, O'Dea RE, Pottier P, Rutkowska J, Senior AM, et al. orchaRd 2.0: an R package for visualising meta-analyses with orchard plots. *Methods in Ecology and Evolution.* 2023;14:2003–2010. |
 | `nakagawaReplicatingResearchEcology2015` | Nakagawa S, Parker TH. Replicating research in ecology and evolution: feasibility, incentives, and the cost-benefit conundrum. *BMC Biology.* 2015;13:88. |
-| `nakagawaSantosMethodologicalIssuesAdvances2012` | Nakagawa S, Santos ESA. Methodological issues and advances in biological meta-analysis. *Evolutionary Ecology.* 2012;26:1253–1274. *(Cited in the dissertation's Methods but absent from its reference list.)* |
+| `nakagawaSantosMethodologicalIssuesAdvances2012` | Nakagawa S, Santos ESA. Methodological issues and advances in conducting meta-analyses in ecology and evolutionary biology. *Evolutionary Ecology.* 2012;26(5):1253–1274. doi: 10.1007/s10682-012-9555-5. |
 | `neatMaleParasiticSpawning2001` | Neat FC. Male parasitic spawning in two species of triplefin blenny (Tripterygiidae): contrasts in demography, behaviour and gonadal characteristics. *Environmental Biology of Fishes.* 2001;61:57–64. |
 | `nobleNonindependenceSensitivityAnalyses2017` | Noble DWA, Lagisz M, O'Dea RE, Nakagawa S. Nonindependence and sensitivity analyses in ecological and evolutionary meta-analyses. *Molecular Ecology.* 2017;26:2410–2425. |
 | `odeaPreferredReportingItems2021` | O'Dea RE, Lagisz M, Jennions MD, Koricheva J, Noble DWA, Parker TH, et al. Preferred reporting items for systematic reviews and meta-analyses in ecology and evolutionary biology: a PRISMA extension. *Biological Reviews.* 2021;96:1695–1722. |
@@ -1066,30 +1087,33 @@ on entry**; a few items are marked where volume/page details need confirming.
 | `parkerSpermCompetitionGamesSpermSize1993` | Parker GA. Sperm competition games: sperm size and sperm number under adult control. *Proceedings of the Royal Society B.* 1993;253:245–254. |
 | `parkerSpermCompetitionIts1970` | Parker GA. Sperm competition and its evolutionary consequences in the insects. *Biological Reviews.* 1970;45:525–567. |
 | `pickReproducibleFlexibleHighthroughput2019` | Pick JL, Nakagawa S, Noble DWA. Reproducible, flexible and high-throughput data extraction from primary literature: the metaDigitise R package. *Methods in Ecology and Evolution.* 2019;10:426–431. |
-| `pilastroBisazzaInseminationEfficiency1999` | Pilastro A, Bisazza A. Insemination efficiency of two alternative male mating tactics in the guppy (*Poecilia reticulata*). *Proceedings of the Royal Society B.* 1999;266:1887–1891. |
+| `pilastroBisazzaInseminationEfficiency1999` | Pilastro A, Bisazza A. Insemination efficiency of two alternative male mating tactics in the guppy (*Poecilia reticulata*). *Proceedings of the Royal Society of London. Series B: Biological Sciences.* 1999;266(1431):1887–1891. doi: 10.1098/rspb.1999.0862. |
 | `pilastroIndividualAdjustmentSperm2002` | Pilastro A, Scaggiante M, Rasotto MB. Individual adjustment of sperm expenditure accords with sperm competition theory. *Proceedings of the National Academy of Sciences USA.* 2002;99:9913–9915. |
-| `polloReliabilityMetaanalysesEcology2025` | Pollo P, Lagisz M, Yang Y, Culina A, Nakagawa S. On the reliability of meta-analyses in ecology and evolution. [Journal, volume, pages: TBD — confirm on entry]; 2025. |
+| `polloReliabilityMetaanalysesEcology2025` | Pollo P, Lagisz M, Macedo-Rego RC, Mizuno A, Yang Y, Nakagawa S. Reliability of meta-analyses in ecology and evolution: (mostly) good news from a case study on sexual signals. *Proceedings of the Royal Society B: Biological Sciences.* 2025;292(2047):20242782. doi: 10.1098/rspb.2024.2782. |
 | `pustejovskyTiptonMetaanalysisRobustVariance2022` | Pustejovsky JE, Tipton E. Meta-analysis with robust variance estimation: expanding the range of working models. *Prevention Science.* 2022;23:425–438. |
 | `raboskyInverseLatitudinalGradient2018` | Rabosky DL, Chang J, Title PO, Cowman PF, Sallan L, Friedman M, et al. An inverse latitudinal gradient in speciation rate for marine fishes. *Nature.* 2018;559:392–395. |
-| `rcoreteamLanguageEnvironmentStatistical2025` | R Core Team. *R: A Language and Environment for Statistical Computing.* Vienna: R Foundation for Statistical Computing; 2025. https://www.R-project.org/ [version: TBD] |
+| `rcoreteamLanguageEnvironmentStatistical2025` | R Core Team. *R: A Language and Environment for Statistical Computing.* Vienna: R Foundation for Statistical Computing; 2025. https://www.R-project.org/. |
 | `richardsonWellbuiltClinicalQuestion1995` | Richardson WS, Wilson MC, Nishikawa J, Hayward RS. The well-built clinical question: a key to evidence-based decisions. *ACP Journal Club.* 1995;123:A12–13. |
 | `rocheHowWellAre2015` | Roche DG, Kruuk LEB, Lanfear R, Binning SA. Public data archiving in ecology and evolution: how well are we doing? *PLoS Biology.* 2015;13:e1002295. |
 | `sanchez-tojarMetaanalysisChallengesTextbook2018` | Sánchez-Tójar A, Nakagawa S, Sánchez-Fortún M, Martin DA, Ramani S, Girndt A, et al. Meta-analysis challenges a textbook example of status signalling and demonstrates publication bias. *eLife.* 2018;7:e37385. |
-| `seivagReproductiveTacticsMale2016` | Seivåg ML, Salvanes AGV, Utne-Palm AC, Kjesbu OS. Reproductive tactics of male bearded goby (*Sufflogobius bibarbatus*) in anoxic and hypoxic waters. *Journal of Sea Research.* 2016;109:29–41. |
+| `seivagReproductiveTacticsMale2016` | Seivåg ML, Salvanes AGV, Utne-Palm AC, Kjesbu OS. Reproductive tactics of male bearded goby (*Sufflogobius bibarbatus*) in anoxic and hypoxic waters. *Journal of Sea Research.* 2016;109:29–41. doi: 10.1016/j.seares.2016.01.006. |
 | `seniorHeterogeneityEcologicalEvolutionary2016` | Senior AM, Grueber CE, Kamiya T, Lagisz M, O'Dwyer K, Santos ESA, Nakagawa S. Heterogeneity in ecological and evolutionary meta-analyses: its magnitude and implications. *Ecology.* 2016;97:3293–3299. |
 | `simmonsSpermCompetitionGames2007` | Simmons LW, Emlen DJ, Tomkins JL. Sperm competition games between sneaks and guards: a comparative analysis using dimorphic male beetles. *Evolution.* 2007;61:2684–2692. |
 | `simmonsSpermCompetitionGamesDimorphic1999` | Simmons LW, Tomkins JL, Hunt J. Sperm competition games played by dimorphic male beetles. *Proceedings of the Royal Society B.* 1999;266:145–150. |
-| `smithRyanEvolutionSpermQuality2010` | Smith CC, Ryan MJ. Evolution of sperm quality but not quantity in the internally fertilized fish *Xiphophorus nigrensis*. *Journal of Evolutionary Biology.* 2010;23:1759–1771. |
+| `smithRyanEvolutionSpermQuality2010` | Smith CC, Ryan MJ. Evolution of sperm quality but not quantity in the internally fertilized fish *Xiphophorus nigrensis*. *Journal of Evolutionary Biology.* 2010;23(8):1759–1771. doi: 10.1111/j.1420-9101.2010.02042.x. |
 | `snookSpermCompetitionNot2005` | Snook RR. Sperm in competition: not playing by the numbers. *Trends in Ecology and Evolution.* 2005;20:46–53. |
-| `stockleySpermCompetitionFishes1997` | Stockley P, Gage MJG, Parker GA, Møller AP. Sperm competition in fishes: the evolution of testis size and ejaculate characteristics. *The American Naturalist.* 1997;149:933–954. *(The dissertation cites this source as "Stockley et al. (2007)" for the sperm competition rank; only the 1997 paper appears in its reference list.)* |
+| `stockleySpermCompetitionFishes1997` | Stockley P, Gage MJG, Parker GA, Møller AP. Sperm competition in fishes: the evolution of testis size and ejaculate characteristics. *The American Naturalist.* 1997;149(5):933–954. doi: 10.1086/286031. |
 | `taborskyBrockmannAlternativeReproductive2010` | Taborsky M, Brockmann HJ. Alternative reproductive tactics and life history phenotypes. In: Kappeler P, editor. *Animal Behaviour: Evolution and Mechanisms.* Berlin: Springer; 2010. p. 537–586. |
 | `taborskyEvolutionAlternativeReproductive2008` | Taborsky M, Oliveira RF, Brockmann HJ. The evolution of alternative reproductive tactics: concepts and questions. In: Oliveira RF, Taborsky M, Brockmann HJ, editors. *Alternative Reproductive Tactics: An Integrative Approach.* Cambridge: Cambridge University Press; 2008. p. 1–22. |
 | `taborskySneakersSatellitesHelpers1994` | Taborsky M. Sneakers, satellites, and helpers: parasitic and cooperative behavior in fish reproduction. *Advances in the Study of Behavior.* 1994;23:1–100. |
 | `taborskySpermCompetitionFish1998` | Taborsky M. Sperm competition in fish: "bourgeois" males and parasitic spawning. *Trends in Ecology and Evolution.* 1998;13:222–227. |
 | `tomkinsMeasuringRelativeInvestment2002` | Tomkins JL, Simmons LW. Measuring relative investment: a case study of testes investment in species with alternative male reproductive tactics. *Animal Behaviour.* 2002;63:1009–1016. |
-| `viechtbauerCheungOutlierInfluence2010` | Viechtbauer W, Cheung MW-L. Outlier and influence diagnostics for meta-analysis. *Research Synthesis Methods.* 2010;1:112–125. |
-| `viechtbauerConductingMetaanalysesMetafor2010` | Viechtbauer W. Conducting meta-analyses in R with the metafor package. *Journal of Statistical Software.* 2010;36:1–48. |
+| `viechtbauerCheungOutlierInfluence2010` | Viechtbauer W, Cheung MW-L. Outlier and influence diagnostics for meta-analysis. *Research Synthesis Methods.* 2010;1(2):112–125. doi: 10.1002/jrsm.11. |
+| `viechtbauerConductingMetaanalysesMetafor2010` | Viechtbauer W. Conducting meta-analyses in R with the metafor package. *Journal of Statistical Software.* 2010;36(3):1–48. doi: 10.18637/jss.v036.i03. |
 | `wedellSpermCompetitionMale2002` | Wedell N, Gage MJG, Parker GA. Sperm competition, male prudence and sperm-limited females. *Trends in Ecology and Evolution.* 2002;17:313–320. |
 | `wilsonPracticalMetaanalysisEffect2018` | Wilson DB. *Practical Meta-Analysis Effect Size Calculator* [online calculator]. Campbell Collaboration; 2018. |
-| `yangPluralisticFrameworkMeasuring2025` | Yang Y, Lagisz M, Nakagawa S. A pluralistic framework for measuring and interpreting heterogeneity in meta-analyses. [Journal, volume, pages: TBD — confirm on entry]; 2025. |
+| `yangPluralisticFrameworkMeasuring2025` | Yang Y, Noble DWA, Spake R, Senior AM, Lagisz M, Nakagawa S. A pluralistic framework for measuring, interpreting and decomposing heterogeneity in meta-analysis. *Methods in Ecology and Evolution.* 2025;16(11). doi: 10.1111/2041-210X.70155. |
 | `yangPublicationBiasImpacts2023` | Yang Y, Sánchez-Tójar A, O'Dea RE, Noble DWA, Koricheva J, Jennions MD, et al. Publication bias impacts on effect size, statistical power, and magnitude (Type M) and sign (Type S) errors in ecology and evolutionary biology. *BMC Biology.* 2023;21:71. |
+| `ballParkerSpermCompetition1996` | Ball MA, Parker GA. Sperm competition games: external fertilization and "adaptive" ejaculation. *Journal of Theoretical Biology.* 1996;180(2):141–150. doi: 10.1006/jtbi.1996.0090. |
+| `birkheadSpermCompetitionSexual1998` | Birkhead TR, Møller AP, editors. *Sperm Competition and Sexual Selection.* London: Academic Press; 1998. |
+| `kustraAlonzoSpermAlternativeReproductive2020` | Kustra MC, Alonzo SH. Sperm and alternative reproductive tactics: a review of existing theory and empirical data. *Philosophical Transactions of the Royal Society B: Biological Sciences.* 2020;375(1813):20200075. doi: 10.1098/rstb.2020.0075. |
