@@ -55,21 +55,27 @@ sperm_competition_meta/
 │   ├── fig3_heterogeneity.png        # Figure 3: Multilevel I^2 variance partitioning
 │   └── fig4_funnel_plot.png          # Figure 4: Funnel plot and small-study diagnostics
 ├── scripts/
+│   ├── reconcile_dissertation_data.py# Exact 183-vs-207 effect size reconciliation script
+│   ├── fetch_openalex.py             # OpenAlex API search & forward citation snowballing
 │   ├── build_results.py              # Compiles model stats & tables to build/results.json
 │   ├── figures.py                    # Generates publication figures to figures/
 │   └── generate_bib.py               # Generates references.bib from protocol table
 ├── protocol/
 │   ├── 01_summary_DelMatto_2018.md   # Comprehensive summary of the 2018 dissertation baseline
-│   └── 02_update_protocol.md         # Pre-registration protocol for the meta-analysis update
+│   └── 02_update_protocol.md         # Pre-registration protocol for update & reconciliation
 ├── references/
-│   ├── references.bib                # Primary BibTeX bibliography (74+ verified entries)
+│   ├── references.bib                # Primary BibTeX bibliography (76+ verified entries)
 │   ├── sperm_competition_meta.bib    # Zotero / Better BibTeX synchronization target
 │   ├── DelMatto_2018_dissertation.pdf# Archived original dissertation (USP, 2018)
 │   ├── DelMatto2018_dissertation.md  # High-fidelity markdown extraction of dissertation
 │   └── README_zotero.md              # Zotero setup instructions
 ├── data/
-│   ├── input/                        # Raw / source datasets (read-only)
-│   └── output/                       # Derived datasets and extracted effect sizes
+│   ├── input/
+│   │   ├── delmatto2018_supp_table1.csv # Raw 207 rows extracted from dissertation PDF
+│   │   └── dougherty2022_all_data.xlsx  # Archived Figshare dataset from Dougherty et al. (2022)
+│   └── output/
+│       ├── delmatto2018_reconciled.csv  # Reconciled 183-effect baseline dataset
+│       └── openalex_update_candidates.csv # 468 candidate records (2017–2026) for screening
 └── analysis/                         # Extended R scripts and analytical notebooks
 ```
 
@@ -92,24 +98,33 @@ R requirements (for underlying multilevel modeling): `metafor`, `orchaRd`, `ape`
 Run the end-to-end pipeline in order:
 
 ```bash
-# Step 1: Compute statistics, format display strings, and write build/results.json
+# Step 1: Reconcile original dissertation data (verifies 183/207 effect sizes)
+python3 scripts/reconcile_dissertation_data.py
+
+# Step 2: (Optional) Harvest latest literature via OpenAlex REST API
+python3 scripts/fetch_openalex.py
+
+# Step 3: Compute statistics, format display strings, and write build/results.json
 python3 scripts/build_results.py
 
-# Step 2: Regenerate all publication figures (300 DPI)
+# Step 4: Regenerate all publication figures (300 DPI)
 python3 scripts/figures.py
 
-# Step 3: Compile the Typst manuscript to PDF
+# Step 5: Compile the Typst manuscript to PDF
 typst compile manuscript.typ manuscript.pdf
 ```
 
 ---
 
-## Note on data provenance & original dissertation
+## Note on data provenance & cross-synthesis reconciliation
 
 The original work is an unpublished MSc dissertation:
 > Del Matto, L. A. (2018). *Sperm competition games between majors and minors: a meta-regression of fishes with alternative mating tactics.* Dissertação de Mestrado, Instituto de Biociências, Universidade de São Paulo. Supervisor: Eduardo S. A. Santos.
 
-Key provenance details:
-- **Supplementary Table 1 discrepancy resolved:** The original appendix records 207 rows. Excluding the 24 absolute gonad mass rows (dropped in the original Methods as non-independent of GSI) yields exactly the reported **183 effect sizes** (65 production = 31 GSI + 34 quantity; 107 quality; 11 allocation).
-- **Variance reconstruction:** The original appendix archived no per-morph standard deviations or sample sizes. The update reconstructs sampling variances under stated assumptions for the reproduction, and re-extracts the 50 primary studies at the per-morph level for the updated synthesis.
+Key provenance and reconciliation details:
+- **Supplementary Table 1 discrepancy resolved:** The original appendix records 207 rows. Programmatically excluding the 24 absolute gonad mass rows (dropped in the original Methods as non-independent of GSI) yields exactly the reported **183 effect sizes** (65 production = 31 GSI + 34 quantity; 107 quality; 11 allocation). Fully verified in `scripts/reconcile_dissertation_data.py`.
+- **Three-way cross-synthesis reconciliation:** Directly compares Del Matto (2018) with the broad-taxa meta-analysis by Dougherty et al. (2022, *Biological Reviews*; 92 animal studies, 58 fishes). Identifies 31 shared teleost studies, audits 19 teleost studies in Del Matto missed by Dougherty (including key behavioral allocation papers), and integrates 27 teleost studies unique to Dougherty.
+- **Resolving the GSI allometry controversy:** Dougherty et al. argued that higher minor testes mass is a GSI ratio artifact, but dropped GSI entirely. Our update fits continuous bivariate allometric meta-regressions with body mass and dimorphism, testing whether disproportionate gonadal investment survives proper scaling.
+- **Restoring behavioral sperm allocation:** Restores per-spawn sperm allocation ($g = +2.732$ in Del Matto), which was omitted in Dougherty et al. (2022).
+- **Testing Parker's non-linear risk predictions:** Implements quadratic polynomial meta-regressions ($SCR + SCR^2$) to test whether divergence peaks at intermediate sperm competition risk, rather than assuming monotonic linearity.
 - **Reporting checklist:** Reporting conforms to the PRISMA-EcoEvo guidelines detailed in [`PRISMA_EcoEvo_checklist.md`](PRISMA_EcoEvo_checklist.md).

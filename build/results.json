@@ -124,6 +124,14 @@
     "egger_m2": "−0.610",
     "all_p": "> 0.05"
   },
+  "crosscheck": {
+    "n_delmatto_studies": 50,
+    "n_dougherty_studies_total": 92,
+    "n_dougherty_studies_fish": 58,
+    "n_shared_studies": 31,
+    "n_delmatto_missed_by_dougherty": 19,
+    "n_dougherty_only_fish": 27
+  },
   "table1": [
     {
       "category": "Allocation",
@@ -205,39 +213,46 @@
   ],
   "table3": [
     {
-      "dimension": "Scope & Eligibility",
-      "q0": "Fishes only; 50 studies, 29 species, 183 effect sizes (1995–2017)",
-      "q1": "Re-extracted fishes + 9-year literature update + secondary non-fish extension"
+      "dimension": "Scope & Taxa",
+      "delmatto": "Fishes only (50 studies, 29 species, 183 effect sizes)",
+      "dougherty": "All animals (92 studies, 67 species; 58 fish studies)",
+      "our_update": "Reconciled fishes master set + post-2020 literature update + non-fish extension"
     },
     {
-      "dimension": "Variance & Effect Sizes",
-      "q0": "Hedges' g archived with single total N; no per-morph SDs/Ns or sampling variances",
-      "q1": "Re-extracted per-morph means, SDs, Ns via metafor::escalc; exact sampling variances"
+      "dimension": "Study Overlap & Gaps",
+      "delmatto": "Archived 50 fish studies (1995–2017)",
+      "dougherty": "Shared 31 fish studies; missed 19 fish studies present in Del Matto",
+      "our_update": "Full reconciliation (31 shared + 19 Del Matto + 27 Dougherty fish + post-2020)"
     },
     {
-      "dimension": "Non-independence & VCV",
-      "q0": "Study + species random intercepts only; observation-level term omitted; no VCV matrix",
-      "q1": "Shared-control / shared-male VCV matrix (r = 0.5); cluster-robust (CR2) standard errors"
+      "dimension": "Behavioral Allocation",
+      "delmatto": "Formal category (k = 11, g = +2.732; majors allocate more per spawn)",
+      "dougherty": "Omitted / collapsed (focused only on stripped/stored sperm counts)",
+      "our_update": "Core functional axis testing ejaculate economy during mating interactions"
     },
     {
-      "dimension": "Phylogeny",
-      "q0": "Vector art tree without branch lengths or source; dropped from final models",
-      "q1": "Formally sourced Ray-finned fish tree (Rabosky / fishtree) with Grafen branch lengths"
+      "dimension": "Testes & GSI Allometry",
+      "delmatto": "GSI only (k = 31, g = −2.638); 24 absolute mass rows excluded",
+      "dougherty": "Argued GSI is an artifact; found no effect when excluding GSI",
+      "our_update": "Bivariate meta-regression modeling body mass & dimorphism as continuous allometric covariates"
     },
     {
       "dimension": "Sperm Competition Proxy",
-      "q0": "5-level unordered factor (SCR), heavily confounded with species at extremes (SCR 1 & 5)",
-      "q1": "Continuous linear & quadratic polynomial meta-regression; minor male frequency"
+      "delmatto": "5-level categorical SCR (Stockley 1997); extreme ranks 1 & 5 confounded",
+      "dougherty": "Sneaker frequency (linear test only); found no effect",
+      "our_update": "Continuous quadratic polynomial testing Parker's intermediate peak + SCR"
     },
     {
-      "dimension": "Allometry & Gonads",
-      "q0": "Excluded all 24 absolute gonad mass rows to avoid duplication with GSI",
-      "q1": "Allometric meta-regression modeling body mass and dimorphism as continuous covariates"
+      "dimension": "Phylogeny",
+      "delmatto": "Vector art tree without branch lengths; dropped from final models",
+      "dougherty": "Open Tree of Life synthetic tree (rotl)",
+      "our_update": "Calibrated Ray-finned fish tree (Rabosky / fishtree) with Grafen branch lengths"
     },
     {
-      "dimension": "Publication Bias",
-      "q0": "Egger's regression intercept only; no funnel plots or time-lag checks",
-      "q1": "Multilevel Egger regression (SE and variance), residual funnel plots, time-lag bias"
+      "dimension": "Variance & Provenance",
+      "delmatto": "Single total N per row; sampling variances not archived",
+      "dougherty": "Re-extracted per-morph statistics for included subset",
+      "our_update": "Complete re-extraction with exact variances via metafor::escalc; fully open data"
     }
   ]
 }

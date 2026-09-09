@@ -298,32 +298,33 @@ Residual funnel plots (@fig:funnel) showed symmetrical distribution of effect si
   ],
 ) <fig:funnel>
 
-== Methodological framework comparison
+== Cross-synthesis reconciliation: Del Matto (2018) and Dougherty et al. (2022)
 
-@tab:evolution summarizes the methodological contrasts between the unarchived 2018 dissertation baseline (Q0) and the fully updated, reproducible synthesis framework (Q1) implemented here.
+To contextualize the evidence base within recent literature, @tab:evolution contrasts the original Del Matto (2018) baseline with the broad-taxa meta-analysis of Dougherty et al. @doughertyMaleAlternativeReproductive2022 and our integrated synthesis. Cross-checking reveals substantial study overlap (#R.crosscheck.n_shared_studies shared teleost studies), but also critical empirical omissions: Dougherty et al. @doughertyMaleAlternativeReproductive2022 missed #R.crosscheck.n_delmatto_missed_by_dougherty fish studies present in Del Matto's baseline (including key experimental tests of sperm allocation), and completely omitted behavioral per-spawn allocation from their analysis. Furthermore, whereas Dougherty et al. @doughertyMaleAlternativeReproductive2022 questioned gonadal investment as an artifact of ratio-based GSI, our updated framework directly tests this by re-incorporating absolute gonad masses alongside continuous body-mass allometric covariates.
 
 #figure(
   caption: [
-    *Comparison of analytical and methodological frameworks.* Contrast between the baseline dissertation reproduction (Q0) and the fully specified update framework (Q1).
+    *Three-way methodological and empirical reconciliation.* Contrast between the Del Matto (2018) dissertation baseline, the Dougherty et al. (2022) broad-taxa synthesis, and our updated, reconciled phylogenetic meta-analysis.
   ],
   kind: table,
 )[
-  #set text(size: 8.5pt)
+  #set text(size: 8pt)
   #table(
-    columns: (1.5fr, 2.2fr, 2.3fr),
-    align: (left, left, left),
+    columns: (1.3fr, 1.8fr, 1.8fr, 2.1fr),
+    align: (left, left, left, left),
     stroke: none,
     fill: (col, row) => if row == 0 { rgb("#1a4f8a") } else if calc.odd(row) { rgb("#f8f9fa") } else { white },
-    inset: (x: 6pt, y: 5pt),
+    inset: (x: 5pt, y: 4.5pt),
 
-    hcell[Methodological Dimension], hcell[Dissertation Baseline (Q0)], hcell[Updated Synthesis Framework (Q1)],
+    hcell[Dimension], hcell[Del Matto (2018)], hcell[Dougherty et al. (2022)], hcell[This Updated Synthesis],
 
     ..R
       .table3
       .map(r => (
         [#text(weight: "bold", r.dimension)],
-        [#r.q0],
-        [#r.q1],
+        [#r.delmatto],
+        [#r.dougherty],
+        [#r.our_update],
       ))
       .flatten(),
   )
