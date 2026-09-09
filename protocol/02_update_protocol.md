@@ -56,11 +56,11 @@ nocite: |
   - Comprehensive reconciliation of the protocol with the broad-taxa meta-analysis by Dougherty et al.
     [@doughertyMaleAlternativeReproductive2022], alongside the original Del Matto
     [@delmattoSpermCompetitionGames2018] MSc dissertation baseline. Formally structured into a three-way
-    reconciliation framework: (1) **Q0a** reproduces the Del Matto (2018) baseline (50 teleost studies, 29
+    reconciliation framework: (1) Q0a reproduces the Del Matto (2018) baseline (50 teleost studies, 29
     species, 183 effect sizes reconciled from 207 raw rows via programmatic exclusion of 24 absolute gonad mass
-    rows); (2) **Q0b** cross-checks and reconciles with Dougherty et al. (2022; 92 animal studies, 58 fish
+    rows); (2) Q0b cross-checks and reconciles with Dougherty et al. (2022; 92 animal studies, 58 fish
     studies, with 31 shared studies, 19 teleost studies from Del Matto's fish-focused search, and 27 fish
-    studies from Dougherty's broad-taxa search); and (3) **Q1** unites both datasets with post-2020 literature
+    studies from Dougherty's broad-taxa search); and (3) Q1 unites both datasets with post-2020 literature
     (harvested programmatically via the OpenAlex API pipeline `scripts/fetch_openalex.py`) into a definitive,
     fully reproducible publication. Formally incorporates continuous bivariate allometric modeling (Q1b) to address
     the methodological questions raised by Dougherty et al. regarding GSI ratio scaling, integrates behavioral
@@ -69,13 +69,13 @@ nocite: |
 - **Version 0.1** (28 Jul, 2026) — Eduardo S. A. Santos
   - Initial draft of update protocol (adapted from the parallel `alien_predator_meta` and
     `mate_choice_meta` update protocols in this lab). Reproduce-then-update design adapted to an
-    **unpublished MSc dissertation** with no archived data or code: **Q0** reconstructs the dataset from
-    the dissertation's Supplementary Table 1 and re-implements the three `rma.mv` models; **Q1** updates
+    unpublished MSc dissertation with no archived data or code: Q0 reconstructs the dataset from
+    the dissertation's Supplementary Table 1 and re-implements the three `rma.mv` models; Q1 updates
     the synthesis with roughly nine years of new evidence and contemporary multilevel methods, with the
     explicit aim of bringing the work to publication. Added the five lettered sub-questions (Q1a curvilinearity
     of the risk effect; Q1b gonad-investment allometry; Q1c the anomalous allocation reversal; Q1d tactic
     architecture and fertilisation mode; Q1e taxonomic generality beyond fishes), §2.2 interpretive-scope
-    caveats, and a named Q0 step to confirm the **183-vs-207 effect-size count reconciliation** documented in
+    caveats, and a named Q0 step to confirm the 183-vs-207 effect-size count reconciliation documented in
     [`01_summary_DelMatto_2018.md`](01_summary_DelMatto_2018.md) §7.
 
 ## 1.2. Title
@@ -130,19 +130,19 @@ The authors have declared that no competing interests exist.
 
 Sperm competition — competition among the ejaculates of different males for the fertilization of a female's
 ova [@parkerSpermCompetitionIts1970] — is a pervasive selective force on male reproductive traits, and
-**sperm competition game models** formalise how males should allocate resources to ejaculates under
+sperm competition game models formalise how males should allocate resources to ejaculates under
 different competitive scenarios [@parkerSpermCompetitionGamesRaffles1990; @parkerSpermCompetitionEvolution1998; @parkerSpermCompetitionGamesGeneral2012; @parkerPizzariSpermCompetitionEjaculate2010]. These models assume that sperm production is
 costly [@dewsburyEjaculateCostMale1982; @wedellSpermCompetitionMale2002], that males trade off ejaculate
 expenditure against mate acquisition [@kvarnemoSimmonsPolyandryMediator2013], and that greater expenditure
-raises fertilization success. Species with **alternative reproductive tactics (ARTs)** offer an unusually
+raises fertilization success. Species with alternative reproductive tactics (ARTs) offer an unusually
 sharp test, because two male phenotypes within one population face structurally different competitive
-regimes [@taborskySneakersSatellitesHelpers1994; @grossAlternativeReproductiveStrategies1996; @taborskyEvolutionAlternativeReproductive2008; @taborskyBrockmannAlternativeReproductive2010]. **Minors**
+regimes [@taborskySneakersSatellitesHelpers1994; @grossAlternativeReproductiveStrategies1996; @taborskyEvolutionAlternativeReproductive2008; @taborskyBrockmannAlternativeReproductive2010]. Minors
 (sneakers, "parasitic" males) spawn inside another male's territory and should essentially always face sperm
-competition; **majors** (guarders, "bourgeois" males) defend territories or females and face lower risk
+competition; majors (guarders, "bourgeois" males) defend territories or females and face lower risk
 [@taborskySpermCompetitionFish1998]. Parker's [-@parkerSpermCompetitionGamesSneaks1990] sneak–guard model
-therefore predicts (i) **greater ejaculate expenditure by minors than majors**, and (ii) that as the
-**frequency of minors rises**, majors converge on minors' expenditure — so the *difference* between tactics
-is **greatest at intermediate** sperm competition and small at both extremes, i.e. a **hump-shaped**
+therefore predicts (i) greater ejaculate expenditure by minors than majors, and (ii) that as the
+frequency of minors rises, majors converge on minors' expenditure — so the *difference* between tactics
+is greatest at intermediate sperm competition and small at both extremes, i.e. a hump-shaped
 relationship. Prior to 2018 the second prediction had been tested comparatively only within one beetle genus,
 where it was not supported [@simmonsSpermCompetitionGames2007],
 and evidence on testis investment and sperm quality in ART species was conflicting
@@ -150,42 +150,42 @@ and evidence on testis investment and sperm quality in ART species was conflicti
 @kellySpermInvestmentRelation2008; @snookSpermCompetitionNot2005].
 
 Del Matto [@delmattoSpermCompetitionGames2018] provided the first cross-species meta-analytic test of both
-predictions, in fishes. From searches of *Web of Knowledge* and *Scopus* last updated **16 May 2017** (868 +
-682 records; 1,103 after deduplication; 205 title/abstract-eligible; **50 studies** retained), she estimated
-**183 Hedges' *g*** effect sizes across **29 fish species**, with positive *g* meaning larger values in
-majors. Response variables were sorted into **Production/GSI**, **Production/Quantity**, **Quality** and
-**Allocation** categories, and each species was assigned a five-level **sperm competition rank (SCR)** based
+predictions, in fishes. From searches of *Web of Knowledge* and *Scopus* last updated 16 May 2017 (868 +
+682 records; 1,103 after deduplication; 205 title/abstract-eligible; 50 studies retained), she estimated
+183 Hedges' *g* effect sizes across 29 fish species, with positive *g* meaning larger values in
+majors. Response variables were sorted into Production/GSI, Production/Quantity, Quality and
+Allocation categories, and each species was assigned a five-level sperm competition rank (SCR) based
 on fertilization mode, pairing and group spawning, following the ranking of Stockley et al.
 [@stockleySpermCompetitionFishes1997]. Three `metafor::rma.mv` models
 [@viechtbauerConductingMetaanalysesMetafor2010] were fitted with study, species and phylogeny random effects.
-The overall mean favoured minors but was not statistically resolved (**−0.519, 95% CI −1.317 to 0.278**;
-*I*² = 83.21%). By variable type, **minors invested substantially more in GSI (−2.638, −3.105 to −2.177)**,
-while **majors allocated significantly more sperm (+2.732, +1.476 to +3.989)** — the opposite of the
-theoretical expectation; sperm **quantity** (−0.384, −0.845 to 0.076) and **quality** (−0.251, −0.699 to
-0.197) did not differ. **SCR had little influence** on the size of the major–minor difference, and phylogeny
+The overall mean favoured minors but was not statistically resolved (−0.519, 95% CI −1.317 to 0.278;
+*I*² = 83.21%). By variable type, minors invested substantially more in GSI (−2.638, −3.105 to −2.177),
+while majors allocated significantly more sperm (+2.732, +1.476 to +3.989) — the opposite of the
+theoretical expectation; sperm quantity (−0.384, −0.845 to 0.076) and quality (−0.251, −0.699 to
+0.197) did not differ. SCR had little influence on the size of the major–minor difference, and phylogeny
 was dropped from both meta-regressions for explaining no variation. Egger's regression intercepts
 [@eggerBiasMetaanalysisDetected1997] gave no indication of publication bias (−0.323, −0.338, −0.610; all
 *p* > 0.28). A full summary is provided in
 [`01_summary_DelMatto_2018.md`](01_summary_DelMatto_2018.md).
 
 Several features make this work both a strong candidate for an update and an obligation to bring to
-publication. First, **it was never published**: a first cross-taxon test of a foundational model of sperm
+publication. First, it was never published: a first cross-taxon test of a foundational model of sperm
 competition currently exists only as a São Paulo dissertation, invisible to the field's evidence base.
-Second, **nothing was archived** — no data file, no code, no registration — so even the reproduction step
+Second, nothing was archived — no data file, no code, no registration — so even the reproduction step
 requires reconstructing the dataset from a PDF appendix. Third, that appendix does not carry the
-quantities the analysis needs: **Supplementary Table 1 reports *g* and a single *N* per row but no per-morph
-means, dispersions or group sample sizes**, so the inverse-variance weights that produced the published
-estimates cannot be recovered exactly, only approximated. Fourth, **the reported dataset size differs from the
-table's row count, though the difference is fully reconcilable**: the Results state 183 effect sizes, but the
-table contains **207** data rows (after removing three PDF line-wrap artefacts) — the Quality (107) and
-Allocation (11) counts match exactly, while Production is 89 rather than 65. Exactly **24** rows record an
-**absolute gonad or testis mass or weight**, the very variables the Methods say were excluded "because they are
+quantities the analysis needs: Supplementary Table 1 reports *g* and a single *N* per row but no per-morph
+means, dispersions or group sample sizes, so the inverse-variance weights that produced the published
+estimates cannot be recovered exactly, only approximated. Fourth, the reported dataset size differs from the
+table's row count, though the difference is fully reconcilable: the Results state 183 effect sizes, but the
+table contains 207 data rows (after removing three PDF line-wrap artefacts) — the Quality (107) and
+Allocation (11) counts match exactly, while Production is 89 rather than 65. Exactly 24 rows record an
+absolute gonad or testis mass or weight, the very variables the Methods say were excluded "because they are
 not independent from GSI"; excluding those 24 (and retaining body-mass-corrected indices such as `testes
-corrected for body mass`, which the rule does not reach) recovers the reported counts **exactly** — 183 total,
+corrected for body mass`, which the rule does not reach) recovers the reported counts exactly — 183 total,
 65 Production, 31 GSI, 34 Quantity. Supplementary Table 1 is therefore the complete extraction sheet, and the
-analysed dataset is reconstructible; confirming this in code is a named step of Q0 below. Fifth, **eight rows
-carry implausible effect sizes** (|*g*| > 8, up to |*g*| = 78.6), which no outlier or influence analysis
-interrogated. Sixth, the **search ended in May 2017**, predating roughly nine years of primary literature and a
+analysed dataset is reconstructible; confirming this in code is a named step of Q0 below. Fifth, eight rows
+carry implausible effect sizes (|*g*| > 8, up to |*g*| = 78.6), which no outlier or influence analysis
+interrogated. Sixth, the search ended in May 2017, predating roughly nine years of primary literature and a
 substantial theoretical and synthetic re-examination of sperm competition in ART species
 [@kustraAlonzoSpermAlternativeReproductive2023; @lupoldHowSpermCompetition2020].
 
@@ -193,29 +193,29 @@ Crucially, the empirical and theoretical landscape advanced substantially with t
 
 The existence of Dougherty et al.'s [@doughertyMaleAlternativeReproductive2022] synthesis alongside Del Matto's [@delmattoSpermCompetitionGames2018] fish-focused baseline creates an exceptional opportunity for cross-synthesis reconciliation, mutual refinement, and an updated, definitive test of sperm competition theory:
 
-1. **Integrating behavioral sperm allocation with static traits:** While broad cross-taxa syntheses like Dougherty et al. [@doughertyMaleAlternativeReproductive2022] understandably focused on static ejaculate metrics (such as stripped counts and sperm morphology) that can be standardized across diverse animal phyla, fish systems uniquely offer rich experimental data on *in vivo* behavioral sperm allocation per spawning event. Del Matto [@delmattoSpermCompetitionGames2018] found that major males allocate substantially more sperm per mating act (+2.732, 95% CI +1.476 to +3.989; 11 effect sizes across 4 studies). Reconciling this behavioral dimension alongside static ejaculate capacity is essential, as game-theoretic models explicitly predict that bourgeois males prudently economize ejaculate expenditure across successive matings, whereas sneakers expend greater effort per mating act [@parkerPizzariSpermCompetitionEjaculate2010; @wedellSpermCompetitionMale2002].
-2. **Testing non-linear risk predictions:** Parker's [-@parkerSpermCompetitionGamesSneaks1990] sneak–guard model explicitly predicts a non-monotonic, hump-shaped relationship—the expenditure difference between tactics peaks at intermediate sperm competition risk and converges at both extremes. Dougherty et al. [@doughertyMaleAlternativeReproductive2022] evaluated sneaker frequency as a linear moderator, reporting a non-significant slope. Because theory specifically predicts an intermediate peak rather than a monotonic gradient, evaluating a quadratic polynomial model ($SCR + SCR^2$) provides a direct test of Parker's hump-shaped expectation.
-3. **Resolving the GSI allometry question:** Dougherty et al. [@doughertyMaleAlternativeReproductive2022] correctly emphasized the methodological challenges of interpreting ratio-based indices such as GSI when body sizes differ between morphs [@tomkinsMeasuringRelativeInvestment2002]. In their primary analyses, Dougherty et al. focused on absolute testis mass, finding no significant overall difference when body mass was not accounted for. Conversely, Del Matto [@delmattoSpermCompetitionGames2018] focused on GSI, excluding absolute gonad mass (24 rows) to prevent duplicate counting. Rather than treating these approaches as mutually exclusive, our synthesis bridges this debate through continuous bivariate allometric meta-regression, modeling absolute gonad mass as a function of male body mass and tactic-specific dimorphism.
-4. **Synthesizing complementary literature bases:** Comparing the 50 teleost studies in Del Matto (2018) with the 58 fish studies in Dougherty et al. (2022) reveals substantial complementarity: 31 studies are shared, while **19 teleost studies** were uniquely identified by Del Matto's fish-specific search (including experimental studies of sperm allocation; e.g., Pilastro et al. 2002 *PNAS*), and **27 fish studies** were newly identified in Dougherty et al.'s broader search. Uniting both datasets captures the full depth of the historical fish literature.
-5. **Temporal update:** With Dougherty et al.'s search concluding in October 2020, over five years of active empirical research (2021–2026) are now available. Integrating this recent literature provides a timely, cumulative update of the global evidence base.
+1. Integrating behavioral sperm allocation with static traits: While broad cross-taxa syntheses like Dougherty et al. [@doughertyMaleAlternativeReproductive2022] understandably focused on static ejaculate metrics (such as stripped counts and sperm morphology) that can be standardized across diverse animal phyla, fish systems uniquely offer rich experimental data on *in vivo* behavioral sperm allocation per spawning event. Del Matto [@delmattoSpermCompetitionGames2018] found that major males allocate substantially more sperm per mating act (+2.732, 95% CI +1.476 to +3.989; 11 effect sizes across 4 studies). Reconciling this behavioral dimension alongside static ejaculate capacity is essential, as game-theoretic models explicitly predict that bourgeois males prudently economize ejaculate expenditure across successive matings, whereas sneakers expend greater effort per mating act [@parkerPizzariSpermCompetitionEjaculate2010; @wedellSpermCompetitionMale2002].
+2. Testing non-linear risk predictions: Parker's [-@parkerSpermCompetitionGamesSneaks1990] sneak–guard model explicitly predicts a non-monotonic, hump-shaped relationship—the expenditure difference between tactics peaks at intermediate sperm competition risk and converges at both extremes. Dougherty et al. [@doughertyMaleAlternativeReproductive2022] evaluated sneaker frequency as a linear moderator, reporting a non-significant slope. Because theory specifically predicts an intermediate peak rather than a monotonic gradient, evaluating a quadratic polynomial model ($SCR + SCR^2$) provides a direct test of Parker's hump-shaped expectation.
+3. Resolving the GSI allometry question: Dougherty et al. [@doughertyMaleAlternativeReproductive2022] correctly emphasized the methodological challenges of interpreting ratio-based indices such as GSI when body sizes differ between morphs [@tomkinsMeasuringRelativeInvestment2002]. In their primary analyses, Dougherty et al. focused on absolute testis mass, finding no significant overall difference when body mass was not accounted for. Conversely, Del Matto [@delmattoSpermCompetitionGames2018] focused on GSI, excluding absolute gonad mass (24 rows) to prevent duplicate counting. Rather than treating these approaches as mutually exclusive, our synthesis bridges this debate through continuous bivariate allometric meta-regression, modeling absolute gonad mass as a function of male body mass and tactic-specific dimorphism.
+4. Synthesizing complementary literature bases: Comparing the 50 teleost studies in Del Matto (2018) with the 58 fish studies in Dougherty et al. (2022) reveals substantial complementarity: 31 studies are shared, while 19 teleost studies were uniquely identified by Del Matto's fish-specific search (including experimental studies of sperm allocation; e.g., Pilastro et al. 2002 *PNAS*), and 27 fish studies were newly identified in Dougherty et al.'s broader search. Uniting both datasets captures the full depth of the historical fish literature.
+5. Temporal update: With Dougherty et al.'s search concluding in October 2020, over five years of active empirical research (2021–2026) are now available. Integrating this recent literature provides a timely, cumulative update of the global evidence base.
 
-Beyond these features, the original leaves the **theory's central prediction only partly tested**. Parker's
-[-@parkerSpermCompetitionGamesSneaks1990] second prediction is explicitly **curvilinear** and is written in
-terms of the **frequency of minors in the population**; the dissertation, unable to obtain minor frequencies,
-substituted a **species-level five-level rank** and fitted it as an **unordered factor** interacted with
+Beyond these features, the original leaves the theory's central prediction only partly tested. Parker's
+[-@parkerSpermCompetitionGamesSneaks1990] second prediction is explicitly curvilinear and is written in
+terms of the frequency of minors in the population; the dissertation, unable to obtain minor frequencies,
+substituted a species-level five-level rank and fitted it as an unordered factor interacted with
 variable type. That specification cannot express a hump, reports no omnibus test of the moderator, and — in
-the reconstructed table — rests on cells that are one species deep at both extremes (**SCR 1 = *Gobius
+the reconstructed table — rests on cells that are one species deep at both extremes (SCR 1 = *Gobius
 niger* only, 15 effect sizes; SCR 5 = *Axoclinus nigricaudus* only, 3 effect sizes, all from Neat
-[-@neatMaleParasiticSpawning2001]**; no row has rank 0). Because SCR is a species-level constant, the
+[-@neatMaleParasiticSpawning2001]; no row has rank 0). Because SCR is a species-level constant, the
 moderator is also fully confounded with species identity. Finally, the Discussion's own explanation for the
-null SCR result — that Parker's model assumes a major faces **one** minor at a time, an assumption violated by
-external fertilizers with multiple sneakers — is a **testable moderator (fertilization mode, tactic
-architecture) that was never entered into a model**.
+null SCR result — that Parker's model assumes a major faces one minor at a time, an assumption violated by
+external fertilizers with multiple sneakers — is a testable moderator (fertilization mode, tactic
+architecture) that was never entered into a model.
 
 Foundational evidence syntheses should be reproduced, replicated, and updated
-[@nakagawaReplicatingResearchEcology2015; @polloReliabilityMetaanalysesEcology2025]. **Reproducing** re-uses
-(or, as here, reconstructs) the original data and analysis to verify accuracy; **replicating** tests the same
-question with new data and/or methods; **updating** incorporates newly available evidence to test whether
+[@nakagawaReplicatingResearchEcology2015; @polloReliabilityMetaanalysesEcology2025]. Reproducing re-uses
+(or, as here, reconstructs) the original data and analysis to verify accuracy; replicating tests the same
+question with new data and/or methods; updating incorporates newly available evidence to test whether
 conclusions hold over time, draws on a larger and more diverse evidence base, and allows newer, more robust
 analytical methods to be applied [@korichevaHandbookMetaanalysisEcology2013]. Given the elapsed time since both
 prior syntheses, the opportunity to reconstruct exact sampling variances for the dissertation baseline, the
@@ -225,8 +225,8 @@ and bring Del Matto's (2018) baseline to formal publication.
 
 ## 2.1. Aims and questions
 
-Our overarching aim is to **reconcile, update, and publish Del Matto's [@delmattoSpermCompetitionGames2018]
-meta-regression** of ejaculate expenditure by major and minor males within a dual-benchmark framework alongside
+Our overarching aim is to reconcile, update, and publish Del Matto's [@delmattoSpermCompetitionGames2018]
+meta-regression of ejaculate expenditure by major and minor males within a dual-benchmark framework alongside
 Dougherty et al. [@doughertyMaleAlternativeReproductive2022], combining both evidence bases with contemporary
 literature (through 2026) and modern multilevel phylogenetic methods.
 
@@ -238,13 +238,13 @@ integrated master synthesis (Q1):
   - **Q0a (reproduce Del Matto 2018):** Can we recover the reported estimates by reconstructing the dataset from
     Supplementary Table 1 and re-implementing the original `rma.mv` models (null; variable type; variable
     type × SCR) in R? This establishes the historical baseline. Q0a has six named steps set out in §3.1,
-    including **confirming the 183-vs-207 effect-size count reconciliation** in code via the 24-gonad-mass
+    including confirming the 183-vs-207 effect-size count reconciliation in code via the 24-gonad-mass
     exclusion rule.
   - **Q0b (cross-reconciliation with Dougherty et al. 2022):** How do the empirical evidence bases and methodological
     choices of Del Matto (2018) and Dougherty et al. (2022) complement and inform one another? We systematically
-    audit study-level overlap and scope: the **31 shared teleost studies**, the **19 fish studies uniquely captured
-    in Del Matto's fish-focused search**, and the **27 fish studies newly captured in Dougherty et al.'s broad-taxa
-    search**; align trait definitions (integrating behavioral per-spawn allocation with static ejaculate traits);
+    audit study-level overlap and scope: the 31 shared teleost studies, the 19 fish studies uniquely captured
+    in Del Matto's fish-focused search, and the 27 fish studies newly captured in Dougherty et al.'s broad-taxa
+    search; align trait definitions (integrating behavioral per-spawn allocation with static ejaculate traits);
     and evaluate how allometric modeling of testis investment compares with both ratio-based (GSI) and absolute mass
     analyses.
   - **Q1 (updated master synthesis):** When we unite both baselines into an expanded master dataset, re-extract
@@ -255,41 +255,41 @@ integrated master synthesis (Q1):
     quantity and quality exhibit subtle or context-dependent divergence; and sperm competition risk modulates
     divergence non-linearly.
 
-We will **not** rely on the reconstructed Supplementary Table 1 as the analysis dataset for Q1. Because that
-table lacks per-morph means, dispersions and sample sizes, we will **re-extract all original and newly identified
-studies** at the per-morph level under the present protocol. The reconstructed table is used for Q0a and as an
+We will not rely on the reconstructed Supplementary Table 1 as the analysis dataset for Q1. Because that
+table lacks per-morph means, dispersions and sample sizes, we will re-extract all original and newly identified
+studies at the per-morph level under the present protocol. The reconstructed table is used for Q0a and as an
 independent cross-check against which re-extractions are audited.
 
 Within Q1 we formally address five central evolutionary issues:
 
 - **Q1a (the shape of the sperm-competition effect):** Parker's [-@parkerSpermCompetitionGamesSneaks1990]
-  sneak–guard model predicts that the **major–minor difference is maximal at intermediate** sperm competition risk,
-  not that it increases monotonically. We therefore fit sperm competition risk as an **ordered/continuous**
-  moderator with a **quadratic term** ($SCR + SCR^2$) and report the omnibus test of the moderator (which neither
+  sneak–guard model predicts that the major–minor difference is maximal at intermediate sperm competition risk,
+  not that it increases monotonically. We therefore fit sperm competition risk as an ordered/continuous
+  moderator with a quadratic term ($SCR + SCR^2$) and report the omnibus test of the moderator (which neither
   prior synthesis did), testing whether divergence follows a hump-shaped curve. Where reported, we additionally
-  use the **proportion of minor males in the population** as a continuous moderator on the reporting subset.
+  use the proportion of minor males in the population as a continuous moderator on the reporting subset.
 - **Q1b (allometric scaling vs. ratio-based testis investment):** Addressing the valuable methodological distinction
-  highlighted by Dougherty et al. (2022) regarding GSI ratio scaling versus absolute testis mass, we **retain both
-  GSI and all 24 absolute gonad mass rows**, fitting a **bivariate allometric meta-regression** with male body mass
+  highlighted by Dougherty et al. (2022) regarding GSI ratio scaling versus absolute testis mass, we retain both
+  GSI and all 24 absolute gonad mass rows, fitting a bivariate allometric meta-regression with male body mass
   and body-mass dimorphism as continuous covariates. We explicitly test whether minors maintain disproportionate
   gonadal investment after accounting for allometric scaling [@tomkinsMeasuringRelativeInvestment2002].
-- **Q1c (behavioral sperm allocation per mating):** Del Matto reported that **majors allocate significantly
-  more sperm per spawn (+2.732, +1.476 to +3.989)**, representing a dynamic behavioral dimension of ejaculate
+- **Q1c (behavioral sperm allocation per mating):** Del Matto reported that majors allocate significantly
+  more sperm per spawn (+2.732, +1.476 to +3.989), representing a dynamic behavioral dimension of ejaculate
   economy that complements the static morphological traits synthesized by Dougherty et al. [@doughertyMaleAlternativeReproductive2022].
   With the reconciled and updated evidence base, we re-estimate this allocation effect while (i) separating
-  **between-morph comparisons** from **within-male experimental manipulations of perceived risk**, (ii) separating
-  **internal from external fertilizers**, and (iii) evaluating whether bourgeois males exhibit greater per-mating
+  between-morph comparisons from within-male experimental manipulations of perceived risk, (ii) separating
+  internal from external fertilizers, and (iii) evaluating whether bourgeois males exhibit greater per-mating
   economy across a wider range of taxa.
-- **Q1d (tactic architecture and fertilization mode):** The sneak–guard model assumes a major faces **one** minor
+- **Q1d (tactic architecture and fertilization mode):** The sneak–guard model assumes a major faces one minor
   at a time, an assumption frequently violated by external fertilizers subject to group spawning
-  [@taborskySpermCompetitionFish1998]. We test as *a priori* moderators: **fertilization mode** (external vs.
-  internal), **tactic plasticity** (fixed-genetic vs. plastic-conditional vs. sequential), and **minor tactic
-  type** (sneaker vs. satellite vs. female mimic), testing whether multi-male competition drives ejaculate
+  [@taborskySpermCompetitionFish1998]. We test as *a priori* moderators: fertilization mode (external vs.
+  internal), tactic plasticity (fixed-genetic vs. plastic-conditional vs. sequential), and minor tactic
+  type (sneaker vs. satellite vs. female mimic), testing whether multi-male competition drives ejaculate
   divergence.
 - **Q1e (taxonomic generality beyond fishes):** The primary synthesis remains fish-focused for direct comparability
   with Del Matto (2018). As an explicit comparative extension, we incorporate the non-fish taxa from Dougherty
   et al. [@doughertyMaleAlternativeReproductive2022] (insects, amphibians, reptiles, mammals) alongside newly
-  retrieved non-fish studies, fitting a combined model with **taxonomic group as a moderator** to test whether
+  retrieved non-fish studies, fitting a combined model with taxonomic group as a moderator to test whether
   the major–minor expenditure asymmetry generalises across the animal kingdom.
 
 Table 1 provides a structured, three-way comparison of the Del Matto (2018) dissertation baseline (Q0a), the
@@ -313,8 +313,8 @@ Dougherty et al. (2022) benchmark (Q0b), and the present updated synthesis (Q1).
 We record the following interpretive commitments *before* seeing the updated results, to constrain how the
 findings will be read:
 
-- **What the effect size measures.** A major–minor Hedges' *g* is a **standardized phenotypic difference
-  between two male classes**, not a measure of fertilization success, paternity share, or fitness. Even a
+- **What the effect size measures.** A major–minor Hedges' *g* is a standardized phenotypic difference
+  between two male classes, not a measure of fertilization success, paternity share, or fitness. Even a
   large difference in GSI or sperm velocity licenses no direct inference about who wins a raffle. We will
   describe results as *differences in ejaculate expenditure traits* and avoid equating them with competitive
   success.
@@ -329,7 +329,7 @@ findings will be read:
   be interpreted as evidence of differential *expenditure* unless it survives an analysis that models body
   mass explicitly.
 - **Sperm competition rank is a coarse proxy, fully confounded with species.** SCR is assigned once per
-  species from fertilization mode, pairing and group spawning; it is **not** the frequency of minors that
+  species from fertilization mode, pairing and group spawning; it is not the frequency of minors that
   Parker's model uses, it has only as many independent values as there are species, and in the original data
   the extreme ranks are represented by one species each. Rank effects will be interpreted as a coarse
   ordination of risk, and any statement about the *shape* of the risk effect will be conditioned on the
@@ -345,12 +345,12 @@ findings will be read:
   @kustraAlonzoSpermAlternativeReproductive2023]. Q1d treats this as a moderator rather than noise, and
   cross-species generalisations will be tempered accordingly.
 - **Non-independence is pervasive and partly invisible.** Most studies report many traits measured on the
-  **same males**, so effect sizes share sampling error in ways the original's random-intercept structure did
+  same males, so effect sizes share sampling error in ways the original's random-intercept structure did
   not capture [@nobleNonindependenceSensitivityAnalyses2017]. Our VCV/cluster-robust treatment mitigates but
   cannot eliminate this; where the correlation among traits is unknown we assume it and show the sensitivity.
 - **Bias the funnel plots cannot see.** ART natural-history papers report morph differences as descriptive
-  results, so classical publication bias may be weak while **selective reporting of "interesting" traits**
-  and **taxonomic concentration** (in the original, 30% of rows are salmonids and 46% come from five species)
+  results, so classical publication bias may be weak while selective reporting of "interesting" traits
+  and taxonomic concentration (in the original, 30% of rows are salmonids and 46% come from five species)
   are strong. Quantitative bias diagnostics (§3.10) do not address either, and we flag them as limitations.
 - **A reproduction that fails is a result.** If the published estimates cannot be recovered from
   Supplementary Table 1 — a live possibility given the absent variances, even though the row set itself
@@ -365,75 +365,75 @@ findings will be read:
 ## 3.1. Protocol, registration, and reproduction
 
 This study protocol will be submitted for pre-registration on the Open Science Framework (OSF).
-[Registration DOI: TBD] Throughout the review and analysis we will adhere to the **PRISMA-EcoEvo** reporting
+[Registration DOI: TBD] Throughout the review and analysis we will adhere to the PRISMA-EcoEvo reporting
 standard for systematic reviews and meta-analyses in ecology and evolutionary biology
 [@odeaPreferredReportingItems2021], completing and archiving the PRISMA-EcoEvo checklist alongside the
-manuscript, and we will report any **deviations from this pre-registered protocol** in a dedicated
+manuscript, and we will report any deviations from this pre-registered protocol in a dedicated
 "additions and deviations" section of the final paper. The original reported its screening with a PRISMA
 flow diagram [@moherPreferredReportingItems2009]; we will publish an updated PRISMA-EcoEvo flow diagram that
 distinguishes original from newly identified records.
 
-Because the original study is an **unpublished dissertation with no deposited dataset and no analysis
-code**, we cannot re-execute an archived repository directly. Furthermore, because a landmark broad-taxa meta-analysis on this topic by Dougherty et al.
+Because the original study is an unpublished dissertation with no deposited dataset and no analysis
+code, we cannot re-execute an archived repository directly. Furthermore, because a landmark broad-taxa meta-analysis on this topic by Dougherty et al.
 [@doughertyMaleAlternativeReproductive2022] applied distinct inclusion filters and highlighted crucial allometric
 nuances, our preparatory baseline proceeds in two coordinated reproduction and reconciliation phases:
 **Q0a (Del Matto 2018 baseline reproduction)** and **Q0b (Dougherty et al. 2022 cross-synthesis reconciliation)**.
 
 ### 3.1.1. Q0a: Reproducing the Del Matto (2018) baseline
 
-The Del Matto reproduction proceeds in **six named steps**:
+The Del Matto reproduction proceeds in six named steps:
 
 1. **Transcribe** Supplementary Table 1 from the source PDF into a machine-readable table
    (`data/input/delmatto2018_supp_table1.csv`), using the high-fidelity markdown conversion
    [`../references/DelMatto2018_dissertation.md`](../references/DelMatto2018_dissertation.md) as the
-   starting point and **verifying every row against the PDF**. The conversion contains three rows that are
+   starting point and verifying every row against the PDF. The conversion contains three rows that are
    line-wrap artefacts of split *Source* cells (Leach & Montgomerie 2000; Koseki & Maekawa 2002;
    Hurtado-Gonzales & Uy 2009); merging those three is all that is required before counting (53 raw *Source*
    strings − 3 fragments = the reported 50 studies).
-2. **Confirm the effect-size count reconciliation in code.** The Results text states **183 effect sizes from 50
-   studies and 29 fish species**. The table yields **50 sources** and **29 species** (the latter after treating
+2. **Confirm the effect-size count reconciliation in code.** The Results text states 183 effect sizes from 50
+   studies and 29 fish species. The table yields 50 sources and 29 species (the latter after treating
    *Parablennius parvicornis* and *Parablennius sanguinolentus parvicornis* as one species; 29 also equals the
-   number of tips in Supplementary Figure 1) — both **agree**. It yields **207 effect-size rows**, of which
-   **107 are Quality (matching exactly)**, **11 are Allocation (matching exactly)** and **89 are Production
-   (against 65 reported: 31 GSI + 34 Quantity)**. Rows labelled `GSI`, `GSI (%)`, `GSI (energy based)` and
-   `adjusted IG` total **31**, matching the reported GSI count exactly. The reconciling rule is the
-   dissertation's own: **exclude the 24 rows recording an absolute gonad or testis mass or weight**, the class
-   the Methods say was dropped "because they are not independent from GSI", while **retaining
-   body-mass-corrected indices** (e.g. `testes corrected for body mass`), which that rule does not reach.
-   Applying it recovers the reported counts **exactly**: 207 − 24 = **183** total, 89 − 24 = **65** Production,
-   split **31 GSI + 34 Quantity**, with Quality **107** and Allocation **11** unchanged; the dissertation's
+   number of tips in Supplementary Figure 1) — both agree. It yields 207 effect-size rows, of which
+   107 are Quality (matching exactly), 11 are Allocation (matching exactly) and 89 are Production
+   (against 65 reported: 31 GSI + 34 Quantity). Rows labelled `GSI`, `GSI (%)`, `GSI (energy based)` and
+   `adjusted IG` total 31, matching the reported GSI count exactly. The reconciling rule is the
+   dissertation's own: exclude the 24 rows recording an absolute gonad or testis mass or weight, the class
+   the Methods say was dropped "because they are not independent from GSI", while retaining
+   body-mass-corrected indices (e.g. `testes corrected for body mass`), which that rule does not reach.
+   Applying it recovers the reported counts exactly: 207 − 24 = 183 total, 89 − 24 = 65 Production,
+   split 31 GSI + 34 Quantity, with Quality 107 and Allocation 11 unchanged; the dissertation's
    printed percentages (35.5 / 58.5 / 6.0%) independently confirm 183 as the analysed *N*. Supplementary
-   Table 1 is therefore the **complete extraction sheet**, and the analysed dataset is reconstructible from it.
+   Table 1 is therefore the complete extraction sheet, and the analysed dataset is reconstructible from it.
    This step has been implemented programmatically (`scripts/reconcile_dissertation_data.py`), confirmed to
    yield 100% exact numerical recovery, and exported to `data/output/delmatto2018_reconciled.csv` with full
    auditing tags.
-3. **Rebuild the derived fields the table does not contain**: the **Production/Quantity vs. Production/GSI**
+3. **Rebuild the derived fields the table does not contain**: the Production/Quantity vs. Production/GSI
    sub-category (re-derived from the free-text response-variable strings, with the classification rules
-   published), and the **observational vs. experimental/laboratory** flag used to subset model 2 (recoverable
-   only by returning to the 50 source articles). Both reconstructions will be documented as **assumptions of
-   the reproduction**, since neither is recoverable from the archive.
-4. **Reconstruct sampling variances.** Supplementary Table 1 reports *g* and a **single** *N* per row with no
+   published), and the observational vs. experimental/laboratory flag used to subset model 2 (recoverable
+   only by returning to the 50 source articles). Both reconstructions will be documented as assumptions of
+   the reproduction, since neither is recoverable from the archive.
+4. **Reconstruct sampling variances.** Supplementary Table 1 reports *g* and a single *N* per row with no
    per-morph sample sizes, so the variance of Hedges' *g* cannot be computed exactly. For Q0a we approximate it
    under the stated assumption of equal morph sample sizes,
    *v* = (*n*₁+*n*₂)/(*n*₁*n*₂) + *g*²/(2(*n*₁+*n*₂)) with *n*₁ = *n*₂ = *N*/2
    [@hedgesDistributionTheoryGlass1981; @borensteinIntroductionMetaanalysis2009], and report the sensitivity of
    the reproduced estimates to departures from that assumption (e.g. 1:2 and 2:1 morph ratios).
-5. **Rebuild the phylogeny.** Supplementary Figure 1 gives a 29-tip topology as an image with **no stated
-   source and no branch lengths**. For Q0a we construct the closest defensible equivalent (see *Data synthesis*)
-   and note that the phylogenetic random effect in the reproduction is therefore **approximate**.
+5. **Rebuild the phylogeny.** Supplementary Figure 1 gives a 29-tip topology as an image with no stated
+   source and no branch lengths. For Q0a we construct the closest defensible equivalent (see *Data synthesis*)
+   and note that the phylogenetic random effect in the reproduction is therefore approximate.
 6. **Re-fit and compare.** Re-implement the three models in R with `metafor::rma.mv`
    [@viechtbauerConductingMetaanalysesMetafor2010]: the null model (study + species + phylogeny); model 1
    (variable type, four levels, parameterized to return a mean per level; study + species); and model 2
    (variable type × SCR on the observational, non-allocation subset; study + species). We verify recovery of
-   the published estimates: the overall mean **−0.519 (−1.317, 0.278)**; **allocation +2.732 (1.476,
-   3.989)**, **GSI −2.638 (−3.105, −2.177)**, **quantity −0.384 (−0.845, 0.076)**, **quality −0.251
-   (−0.699, 0.197)**; the *I*² decompositions; and Egger intercepts.
+   the published estimates: the overall mean −0.519 (−1.317, 0.278); allocation +2.732 (1.476,
+   3.989), GSI −2.638 (−3.105, −2.177), quantity −0.384 (−0.845, 0.076), quality −0.251
+   (−0.699, 0.197); the *I*² decompositions; and Egger intercepts.
 
 **Data audit as part of Q0a.** Eight rows in Supplementary Table 1 carry |*g*| > 8 (maximum |*g*| = 78.624,
 seminal vesicle mass in *Sufflogobius bibarbatus* [@seivagReproductiveTacticsMale2016]; 54.723, sperm density
 in *Lepomis macrochirus* [@burnessMotilityATPLevels2005]; −48.947 and −23.531, relative sperm volume and
 number in *Salmo salar* [@gageEffectsAlternativeMale1995]), and 22 rows carry |*g*| > 3. All eight will be
-**re-extracted from source as a priority**, each discrepancy classified by cause, and the reproduction reported
+re-extracted from source as a priority, each discrepancy classified by cause, and the reproduction reported
 both with and without them.
 
 ### 3.1.2. Q0b: Cross-reconciliation with Dougherty et al. (2022)
@@ -445,10 +445,10 @@ cross-reconciliation with Dougherty et al. [@doughertyMaleAlternativeReproductiv
    (`data/input/dougherty2022_all_data.xlsx`), standardizing taxonomic names, study DOIs, and trait categories.
 2. **Study overlap and scope analysis:** Cross-reference study identities against Del Matto (2018). Of the 58
    teleost studies in Dougherty et al. and the 50 in Del Matto:
-   - **31 studies are shared** between both syntheses.
-   - **19 teleost studies in Del Matto were unique to the fish-specific search**, including experimental studies of
+   - 31 studies are shared between both syntheses.
+   - 19 teleost studies in Del Matto were unique to the fish-specific search, including experimental studies of
      behavioral sperm allocation (e.g. Pilastro et al. 2002 *PNAS*) and seminal goby/salmonid studies.
-   - **27 teleost studies in Dougherty et al. were uniquely captured under their search criteria**, representing
+   - 27 teleost studies in Dougherty et al. were uniquely captured under their search criteria, representing
      valuable post-2017 additions and complementary historical literature.
 3. **Trait category mapping and scope alignment:** Map Dougherty et al.'s trait classes to Del Matto's four
    categories. We evaluate how the incorporation of behavioral per-spawn allocation traits enriches static ejaculate
@@ -469,26 +469,26 @@ expenditure by major and minor males in species with alternative reproductive ta
 questions*, above). Under the PECOS framework [@richardsonWellbuiltClinicalQuestion1995;
 @fooPracticalGuideQuestion2021], our main eligibility criteria are:
 
-**Population:** Adult males of species in which males express **two or more alternative reproductive
-tactics**. The **primary synthesis is restricted to fishes** (gnathostome fishes; non-hermaphroditic
-species), for comparability with the 2018 baseline. A **secondary extension dataset** (Q1e) admits any other
+**Population:** Adult males of species in which males express two or more alternative reproductive
+tactics. The primary synthesis is restricted to fishes (gnathostome fishes; non-hermaphroditic
+species), for comparability with the 2018 baseline. A secondary extension dataset (Q1e) admits any other
 animal taxon with male ARTs.
 
-**Exposure:** Membership of the **minor** (parasitic, sneaker/satellite/female-mimic, non-territorial) male
-tactic, as defined by the source study. For the allocation category we additionally admit **experimental
-manipulation of perceived sperm competition risk** within males of a given tactic, recorded as a distinct
+**Exposure:** Membership of the minor (parasitic, sneaker/satellite/female-mimic, non-territorial) male
+tactic, as defined by the source study. For the allocation category we additionally admit experimental
+manipulation of perceived sperm competition risk within males of a given tactic, recorded as a distinct
 design (see Q1c).
 
-**Comparator:** Males of the **major** (bourgeois, territorial/guarding, courting) tactic from the **same
-study and population**; or, for within-male manipulations, the low-risk control treatment.
+**Comparator:** Males of the major (bourgeois, territorial/guarding, courting) tactic from the same
+study and population; or, for within-male manipulations, the low-risk control treatment.
 
-**Outcomes:** Quantitative **ejaculate expenditure traits**, classified in the original's three categories
+**Outcomes:** Quantitative ejaculate expenditure traits, classified in the original's three categories
 and their sub-categories, retained verbatim for comparability:
 
 - **Production/GSI** — gonadosomatic index and equivalent relative gonad indices (body-mass, soma-mass or
   energy based).
 - **Production/Quantity** — sperm number, density, concentration, volume, spermatocrit, stripped sperm mass,
-  milt mass, and (newly retained, see Q1b) **absolute gonad or testis mass, with body mass recorded**.
+  milt mass, and (newly retained, see Q1b) absolute gonad or testis mass, with body mass recorded.
 - **Quality** — sperm velocity (average path, straight-line, curvilinear), motility, longevity, linearity,
   sperm morphometrics (total, flagellum, midpiece, head, end piece), ATP and energy-charge measures, sperm
   enzyme activity, and accessory-organ measures (seminal vesicle mass and SVSI, testicular gland area and
@@ -498,64 +498,64 @@ and their sub-categories, retained verbatim for comparability:
   sperm at rest.
 
 **Study design:** Observational between-morph comparisons and experimental studies (field or laboratory) that
-report, or allow calculation of, **per-morph means, a dispersion measure (SD/SE/CI) and per-morph sample
-sizes**; or, failing that, **inferential statistics together with the direction of the effect** (which morph
+report, or allow calculation of, per-morph means, a dispersion measure (SD/SE/CI) and per-morph sample
+sizes; or, failing that, inferential statistics together with the direction of the effect (which morph
 had the larger value), as in the original.
 
 Following and extending the original selection criteria, our criteria are:
 
-1. The study reports data on a species in which males express **at least two described reproductive
-   tactics**, and the tactics are **explicitly assigned** to individuals (by morph, behaviour, size class,
+1. The study reports data on a species in which males express at least two described reproductive
+   tactics, and the tactics are explicitly assigned to individuals (by morph, behaviour, size class,
    territory ownership or age class).
-2. The species is **not hermaphroditic** (carried over from the original).
-3. **Both male tactics are compared** with respect to at least one ejaculate expenditure trait in the
+2. The species is not hermaphroditic (carried over from the original).
+3. Both male tactics are compared with respect to at least one ejaculate expenditure trait in the
    categories above.
-4. For each contrast, the study reports (or allows calculation of) a **mean, a dispersion measure, and a
-   sample size for each morph**; or reports an inferential test statistic **plus the direction** of the
+4. For each contrast, the study reports (or allows calculation of) a mean, a dispersion measure, and a
+   sample size for each morph; or reports an inferential test statistic plus the direction of the
    difference.
 5. The study reports primary data (not a re-analysis of another study's data already included).
 6. Records may be in any language; non-English records will be processed as described in *Information
    sources*.
-7. For the primary synthesis the species must be a **fish**; non-fish records are retained in the extension
+7. For the primary synthesis the species must be a fish; non-fish records are retained in the extension
    dataset (Q1e) and analysed separately.
 
 *Assigning tactics in ambiguous cases.* Because ART terminology is heterogeneous, we pre-specify the
 following coding rules, recording the study's own wording verbatim in a note field:
-(i) **territory owners, nest holders, courting males, "bourgeois", "guarders", "hooknose", "large"/"major"
-morphs** → **major**; (ii) **sneakers, satellites, female mimics, streakers, "parasitic" spawners,
-"jacks", non-territorial/non-nesting males** → **minor**; (iii) where a study describes **three or more**
+(i) territory owners, nest holders, courting males, "bourgeois", "guarders", "hooknose", "large"/"major"
+morphs → major; (ii) sneakers, satellites, female mimics, streakers, "parasitic" spawners,
+"jacks", non-territorial/non-nesting males → minor; (iii) where a study describes three or more
 tactics, the most territorial is coded major and each remaining tactic is coded as a separate minor class,
 with the tactic name retained so tactic-type moderators (Q1d) are available; (iv) where tactics are
-**sequential/age- or size-based** (e.g. jack vs. hooknose salmon), the study is included and flagged
+sequential/age- or size-based (e.g. jack vs. hooknose salmon), the study is included and flagged
 `sequential`, since the model's role asymmetry still applies within a breeding season; (v) where the
-"tactics" are only the two ends of a **continuous size distribution** with no discrete morph and no
-behavioural assignment, the record is **excluded** and the decision recorded. Where a study's own
+"tactics" are only the two ends of a continuous size distribution with no discrete morph and no
+behavioural assignment, the record is excluded and the decision recorded. Where a study's own
 designation conflicts with these rules, we follow the rules and record the discrepancy.
 
 ### 3.3.1. Data-structuring rules (carried over from the original, for comparability)
 
 - **One row per trait × morph-pair × population.** Unlike the original, multiple traits from one study are
-  retained as **separate rows nested within study** rather than averaged, with their dependence modelled
+  retained as separate rows nested within study rather than averaged, with their dependence modelled
   explicitly (see *Data synthesis*).
 - **Repeated measurements over time** (motility/velocity measured at several times post activation) → extract
-  **only the first measurement after activation**, exactly as the original did.
+  only the first measurement after activation, exactly as the original did.
 - **Redundant indices from the same males** (e.g. GSI and absolute gonad mass; SVSI and absolute seminal
-  vesicle mass; accessory gland mass and its body-mass-corrected form) → **both retained** and linked by a
+  vesicle mass; accessory gland mass and its body-mass-corrected form) → both retained and linked by a
   `redundancyGroup` identifier, with `indexType` recorded, so that one member per group can be dropped in
   sensitivity analyses instead of deleting data *a priori* as the original did.
 - **Multiple populations** of one species in one study → separate rows, with population recorded; SCR is
   assigned per species, and where populations differ in fertilization context this is noted.
 - **Multiple experimental treatments sharing one control** → separate rows, linked by a shared-control
   identifier for the variance–covariance matrix.
-- **Directionality convention retained:** positive Hedges' *g* = larger value in **majors**; negative =
-  larger value in **minors**. Retained for direct comparability with the 2018 estimates, and stated
+- **Directionality convention retained:** positive Hedges' *g* = larger value in majors; negative =
+  larger value in minors. Retained for direct comparability with the 2018 estimates, and stated
   prominently in every figure caption because it is the reverse of the intuitive "expenditure" direction.
 - **Effect-size benchmarks** of 0.2 / 0.5 / 0.8 [@cohenStatisticalPowerAnalysis1969] will be reported for
   continuity with the original but not used for inference.
 - **Sperm competition rank** is coded per species from primary life-history sources
   [@froesePaulyFishBase2025] following the definitions of Stockley et al.
-  [@stockleySpermCompetitionFishes1997] as reproduced in the original (levels 0–5), **independently by two
-  coders**, with agreement reported and disagreements resolved by discussion. The original's rank values are
+  [@stockleySpermCompetitionFishes1997] as reproduced in the original (levels 0–5), independently by two
+  coders, with agreement reported and disagreements resolved by discussion. The original's rank values are
   retained as a separate column so that re-coding effects can be isolated.
 
 ### 3.3.2. Exclusion criteria
@@ -567,17 +567,17 @@ inferential statistic with a stated direction, and no raw data or figure from wh
 (5) report only traits outside the three expenditure categories (e.g. purely hormonal, colour or
 morphological traits unrelated to the ejaculate); (6) are reviews, models or opinion pieces reporting no new
 primary quantitative data (reviews will be screened for primary references); or (7) re-analyse data already
-included from another source. For the primary synthesis, non-fish records are not excluded but **routed to the
-extension dataset** (Q1e).
+included from another source. For the primary synthesis, non-fish records are not excluded but routed to the
+extension dataset (Q1e).
 
 ## 3.4. Information sources
 
-We will reproduce the original searches in **Web of Science** (the original's *Web of Knowledge*; we will use
-the **Core Collection** and record the exact editions searched) and **Scopus**, and, to broaden coverage,
-additionally search **Aquatic Sciences and Fisheries Abstracts (ASFA, ProQuest)** — a fisheries-specific
+We will reproduce the original searches in Web of Science (the original's *Web of Knowledge*; we will use
+the Core Collection and record the exact editions searched) and Scopus, and, to broaden coverage,
+additionally search Aquatic Sciences and Fisheries Abstracts (ASFA, ProQuest) — a fisheries-specific
 database the original did not use — plus supplementary sources for grey and non-English literature: the
-**Scientific Electronic Library Online (SciELO)**, the **Bielefeld Academic Search Engine (BASE)** for
-unpublished theses and grey literature, and **Google Scholar** (run with `Publish or Perish`
+Scientific Electronic Library Online (SciELO), the Bielefeld Academic Search Engine (BASE) for
+unpublished theses and grey literature, and Google Scholar (run with `Publish or Perish`
 [@harzingPublishPerish2007], sorted by relevance, records not numerically capped per language).
 
 To maximize search efficiency, eliminate manual retrieval bottlenecks, and ensure 100% reproducible programmatic
@@ -590,21 +590,21 @@ literature updates, we integrate two major modern evidentiary resources:
    cross-synthesis auditing of all 92 animal studies (58 teleost studies) and immediate retrieval of primary
    citations.
 
-Grey literature matters unusually much here: the work being updated **is itself an unpublished dissertation**, and
-the ART literature is rich in theses and regional journals. We will **not** impose language restrictions:
-search strings will be **translated** and the results screened by **reviewers with expertise in the
-respective languages**, following the multilingual, grey-literature–inclusive strategy used in the parallel
+Grey literature matters unusually much here: the work being updated is itself an unpublished dissertation, and
+the ART literature is rich in theses and regional journals. We will not impose language restrictions:
+search strings will be translated and the results screened by reviewers with expertise in the
+respective languages, following the multilingual, grey-literature–inclusive strategy used in the parallel
 `mate_choice_meta` and `alien_predator_meta` updates in this lab. [Languages and reviewer assignments: TBD.]
 
-We will also: (i) **complete the original screening** by retrieving and screening the **14 title/abstract-
-eligible articles the original left unscreened "because of time constraints"**; (ii) screen reference lists
-and citing articles of the original's **50 included studies**, of the original itself, of Dougherty et al.
+We will also: (i) complete the original screening by retrieving and screening the 14 title/abstract-
+eligible articles the original left unscreened "because of time constraints"; (ii) screen reference lists
+and citing articles of the original's 50 included studies, of the original itself, of Dougherty et al.
 [@doughertyMaleAlternativeReproductive2022], and of key reviews and syntheses of sperm competition in ART
 species (backward/forward snowballing; [@taborskyEvolutionAlternativeReproductive2008;
 @kustraAlonzoSpermAlternativeReproductive2023; @lupoldHowSpermCompetition2020;
 @kellyJennionsSexualSelectionSperm2011; @buzattoAlternativePhenotypesWithin2014]); (iii) consult the datasets
 of published comparative analyses of fish sperm traits [@stockleySpermCompetitionFishes1997;
-@fitzpatrickFemalePromiscuityPromotes2009]; and (iv) **contact authors** for per-morph means, dispersions and
+@fitzpatrickFemalePromiscuityPromotes2009]; and (iv) contact authors for per-morph means, dispersions and
 sample sizes that were not reported — a step the original did not take and which is essential here, because
 the update requires per-morph statistics that many papers report only graphically.
 
@@ -613,7 +613,7 @@ the update requires per-morph statistics that many papers report only graphicall
 We will validate search sensitivity using a benchmarking / relative-recall approach [@lagiszPracticalGuideEvaluating2025] against an *a priori* registered benchmark set of 15 representative studies sampled from the original 50 baseline studies (stratified to capture 100% of the sperm allocation studies, alongside balanced representation of GSI and sperm quality traits across 10 teleost families; registered in full in [`03_benchmark_set.md`](03_benchmark_set.md) and compiled to [`03_benchmark_set.pdf`](03_benchmark_set.pdf)).
 
 **Original search string (the Q0 baseline; reproduced verbatim from the dissertation),** used in the basic
-search of all *Web of Knowledge* databases and the advanced search of *Scopus*, last updated **16 May 2017**:
+search of all *Web of Knowledge* databases and the advanced search of *Scopus*, last updated 16 May 2017:
 
 ```
 ("alternat* sex* behavio*r*" OR "alternat* sex* role*" OR "alternat* sex* phenotype*" OR
@@ -629,15 +629,15 @@ AND
 ("sperm competition" OR "testis size" OR "ejaculate" OR "sperm allocation" OR "post*copulato*")
 ```
 
-Reported yield: **Web of Knowledge 868**, **Scopus 682**, **1,103 distinct records** after deduplication.
+Reported yield: Web of Knowledge 868, Scopus 682, 1,103 distinct records after deduplication.
 
 > **Note on the keyword set.** The original string is reproducible but has three weaknesses we will address
-> rather than inherit. (i) The **tactic block contains no plain synonyms** for the phenotypes themselves —
-> *sneak\**, *satellite*, *parasitic spawn\**, *bourgeois*, *jack*, *female mimic*, *dwarf male*,
+> rather than inherit. (i) The tactic block contains no plain synonyms for the phenotypes themselves —
+> *sneak\, *satellite*, *parasitic spawn\, *bourgeois*, *jack*, *female mimic*, *dwarf male*,
 > *territorial* — so studies that describe the tactics without using the phrase "alternative … tactic" can
-> be missed. (ii) The **outcome block is narrow**: it omits *GSI*, *gonadosomatic*, *testes mass*, *milt*,
+> be missed. (ii) The outcome block is narrow: it omits *GSI*, *gonadosomatic*, *testes mass*, *milt*,
 > *sperm velocity*, *sperm motility*, *sperm number*, *sperm quality*, *spermatocrit*, *seminal vesicle*,
-> and *paternity*. (iii) **Leading wildcards** (`"male* *morph*"`) and mid-phrase wildcards
+> and *paternity*. (iii) Leading wildcards (`"male* *morph*"`) and mid-phrase wildcards
 > (`"post*copulato*"`, `"behavio*r*"`) are handled inconsistently across platforms and may have behaved
 > differently in *Web of Knowledge* and *Scopus*. For the update we will construct explicit, reproducible
 > Boolean strings per database from an expanded tactic block crossed with an expanded ejaculate-trait block,
@@ -697,7 +697,7 @@ To maintain an agile, automated pipeline, we developed `scripts/fetch_openalex.p
    - Dougherty et al. (2022): `https://openalex.org/W4214734077`
    - Kustra & Alonzo (2020): `https://openalex.org/W3093437048`
 - Access date: 09 Sep, 2026
-- Initial records retrieved: **468 candidate records** (2017–2026) exported to `data/output/openalex_update_candidates.csv`
+- Initial records retrieved: 468 candidate records (2017–2026) exported to `data/output/openalex_update_candidates.csv`
   with DOIs, titles, abstracts, and citation counts ready for automated deduplication and multi-reviewer screening.
 
 ### 3.5.6. Extension search for non-fish taxa (Q1e)
@@ -710,15 +710,15 @@ To maintain an agile, automated pipeline, we developed `scripts/fetch_openalex.p
 
 ## 3.6. Study selection
 
-We will export and **deduplicate** retrieved records, and remove records already represented in the
-reconstructed original dataset so that screening focuses on **new evidence**. Records will be randomly
+We will export and deduplicate retrieved records, and remove records already represented in the
+reconstructed original dataset so that screening focuses on new evidence. Records will be randomly
 assigned to the team for screening; records passing full-text screening proceed to data extraction, where
 their effect sizes are added to the re-extracted original dataset to form the updated dataset (Q1). Records
-whose only eligible species are non-fish are routed to the **extension dataset** (Q1e) rather than excluded.
+whose only eligible species are non-fish are routed to the extension dataset (Q1e) rather than excluded.
 
 ## 3.7. Screening
 
-We will conduct **two-stage screening** in **Rayyan** [@ouzzaniRayyanWebMobile2016]: (1) title/abstract/keywords, then (2) full text, each assessed by **at least two independent reviewers** (blind mode), guided by decision trees (Figures 1 and 2). Disagreements are resolved by discussion, with a third reviewer as moderator. A pilot screening exercise will estimate inter-reviewer agreement and refine the operational criteria. This is a substantive change from the original, which appears to have been screened by a single reviewer and which left 14 eligible records unscreened. [Pilot results: TBD]
+We will conduct two-stage screening in Rayyan [@ouzzaniRayyanWebMobile2016]: (1) title/abstract/keywords, then (2) full text, each assessed by at least two independent reviewers (blind mode), guided by decision trees (Figures 1 and 2). Disagreements are resolved by discussion, with a third reviewer as moderator. A pilot screening exercise will estimate inter-reviewer agreement and refine the operational criteria. This is a substantive change from the original, which appears to have been screened by a single reviewer and which left 14 eligible records unscreened. [Pilot results: TBD]
 
 ![Screening decision tree for title, abstract, and keywords (first-stage screening).](../figures/decision_tree_stage1.png)
 *Figure 1. Screening decision tree for title, abstract, and keywords (first-stage screening).*
@@ -728,17 +728,17 @@ We will conduct **two-stage screening** in **Rayyan** [@ouzzaniRayyanWebMobile20
 
 ## 3.8. Data extraction
 
-We will extract effect-size data from text, tables, supplementary materials, and figures. For values reported graphically in figures, data will be extracted primarily using an automated multimodal Large Language Model (LLM) extraction pipeline, standardizing prompt schemas to capture means, dispersions, sample sizes, and coordinate axes. To rigorously validate the fidelity and precision of the LLM extractions against gold-standard manual photogrammetry, a randomly selected subset of 10% of all figure-derived records will be independently digitized using **metaDigitise** [@pickReproducibleFlexibleHighthroughput2019]. We will assess and report quantitative inter-method agreement (Bland–Altman 95% limits of agreement, intraclass correlation coefficients [ICC], and mean relative percentage error). If discrepancies exceed acceptable tolerance thresholds (e.g., >2% relative difference in means or >5% in dispersions), the LLM prompts and visual crop pipelines will be recalibrated and re-verified. In addition, at least **10%** of all newly extracted records across all sources will be independently and blindly re-extracted by a second human reviewer; discrepancies will be resolved by consensus discussion, and inter-extractor agreement will be reported. Variables that cannot be extracted will be coded "NA". Effect sizes **converted** between metrics, **computed from inferential statistics**, or **reconstructed from the dissertation's appendix** rather than directly calculated will be flagged in a provenance field (see Table 2) so they can be isolated in sensitivity analyses.
+We will extract effect-size data from text, tables, supplementary materials, and figures. For values reported graphically in figures, data will be extracted primarily using an automated multimodal Large Language Model (LLM) extraction pipeline, standardizing prompt schemas to capture means, dispersions, sample sizes, and coordinate axes. To rigorously validate the fidelity and precision of the LLM extractions against gold-standard manual photogrammetry, a randomly selected subset of 10% of all figure-derived records will be independently digitized using metaDigitise [@pickReproducibleFlexibleHighthroughput2019]. We will assess and report quantitative inter-method agreement (Bland–Altman 95% limits of agreement, intraclass correlation coefficients [ICC], and mean relative percentage error). If discrepancies exceed acceptable tolerance thresholds (e.g., >2% relative difference in means or >5% in dispersions), the LLM prompts and visual crop pipelines will be recalibrated and re-verified. In addition, at least 10% of all newly extracted records across all sources will be independently and blindly re-extracted by a second human reviewer; discrepancies will be resolved by consensus discussion, and inter-extractor agreement will be reported. Variables that cannot be extracted will be coded "NA". Effect sizes converted between metrics, computed from inferential statistics, or reconstructed from the dissertation's appendix rather than directly calculated will be flagged in a provenance field (see Table 2) so they can be isolated in sensitivity analyses.
 
 **Re-extracting the original studies (not merely transcribing them).** Because Supplementary Table 1
-archives only *g*, a single *N*, and a category label, the update requires a **full per-morph re-extraction
-of all 50 original studies**: means, dispersions and sample sizes for majors and minors separately, plus body
+archives only *g*, a single *N*, and a category label, the update requires a full per-morph re-extraction
+of all 50 original studies: means, dispersions and sample sizes for majors and minors separately, plus body
 mass, fertilization mode, tactic descriptors and study design. The transcribed Supplementary Table 1 then
-serves as an independent **cross-check**: for every row we can match on species × response variable × source
+serves as an independent cross-check: for every row we can match on species × response variable × source
 and compare the re-extracted *g* against the archived *g*. Following the validation approach of the parallel
 `mate_choice_meta` update [and the validation-codebook logic of @sanchez-tojarMetaanalysisChallengesTextbook2018],
-agreement will be assessed **quantitatively** — using correlation, an OLS slope, and **Bland–Altman limits
-of agreement** on *g* — and each discrepant record will be **classified by cause** (e.g., transcription
+agreement will be assessed quantitatively — using correlation, an OLS slope, and Bland–Altman limits
+of agreement on *g* — and each discrepant record will be classified by cause (e.g., transcription
 error, different outcome extracted, SE-treated-as-SD, different morph pairing, different time point,
 digitising error, sign error). The eight rows with |*g*| > 8 and the 22 rows with |*g*| > 3 are prioritised.
 Material discrepancies will be documented in a public discrepancy log, and the reproduction (Q0) will be
@@ -850,7 +850,7 @@ Analyses will be scripted in R [@rcoreteamLanguageEnvironmentStatistical2025] (w
 multilevel meta-analysis pipeline (see the `ecoevo-meta-pipeline` skill): one `config.yml` maps the
 extraction sheet's columns onto the effect-size engine and the random structure, and a single call runs
 effect sizes → multilevel `rma.mv` → heterogeneity → publication bias → report. The full workflow — data,
-code, model objects, diagnostics, and figures — will be compiled into a reproducible **Quarto** website with
+code, model objects, diagnostics, and figures — will be compiled into a reproducible Quarto website with
 pinned package versions, as in the parallel `mate_choice_meta` update, and archived with the data (see
 *Data availability*).
 
@@ -869,72 +869,72 @@ reproduction-limitations table.
 **For Q1 (the update):** we move to a dataset in which every effect size is computed from per-morph
 statistics, and to one multilevel model.
 
-*Effect sizes.* **Hedges' *g*** (SMD) will be computed with `metafor::escalc` from per-morph means, SDs and
+*Effect sizes.* Hedges' *g* (SMD) will be computed with `metafor::escalc` from per-morph means, SDs and
 sample sizes [@hedgesDistributionTheoryGlass1981; @borensteinIntroductionMetaanalysis2009;
 @viechtbauerConductingMetaanalysesMetafor2010], retaining the original's sign convention (positive = majors
 larger). Where only a test statistic and a direction are available, *g* is reconstructed via the standard
 formulae and flagged (`effectSizeProvenance`), as the original did with the Practical Meta-Analysis Effect
 Size Calculator [@wilsonPracticalMetaanalysisEffect2018]. Where morph means are strictly positive and on a
-ratio scale (most production and allocation traits), we will additionally compute the **log response ratio
-(lnRR)** as a scale-free cross-check that is insensitive to between-morph differences in variance, and the
-**log coefficient-of-variation ratio (lnCVR)** [@nakagawaMetaanalysisVariation2015] to ask the new question
-of whether **minors are more variable** in ejaculate traits than majors — a prediction of conditional tactic
+ratio scale (most production and allocation traits), we will additionally compute the log response ratio
+(lnRR) as a scale-free cross-check that is insensitive to between-morph differences in variance, and the
+log coefficient-of-variation ratio (lnCVR) [@nakagawaMetaanalysisVariation2015] to ask the new question
+of whether minors are more variable in ejaculate traits than majors — a prediction of conditional tactic
 expression the original could not address. Effect sizes with non-positive or missing variances are excluded
 by the model filter and reported.
 
-*Model structure.* We will fit **multilevel `rma.mv` models** [metafor;
-@viechtbauerConductingMetaanalysesMetafor2010] with random intercepts for **study ID**, **effect-size
-(observation) ID** and **species** — the observation-level term the original did not describe — plus a
-**phylogenetic** species term (below). Non-independence among effect sizes measured on the **same males** or
+*Model structure.* We will fit multilevel `rma.mv` models [metafor;
+@viechtbauerConductingMetaanalysesMetafor2010] with random intercepts for study ID, effect-size
+(observation) ID and species — the observation-level term the original did not describe — plus a
+phylogenetic species term (below). Non-independence among effect sizes measured on the same males or
 sharing a control (the dominant form of dependence in this literature: most studies report many sperm traits
-from one set of males) will be modelled with a **variance–covariance matrix** (assuming a within-cluster
-correlation of *r* = 0.5), and inference will use **cluster-robust (RVE/CR2) confidence intervals**
+from one set of males) will be modelled with a variance–covariance matrix (assuming a within-cluster
+correlation of *r* = 0.5), and inference will use cluster-robust (RVE/CR2) confidence intervals
 [@pustejovskyTiptonMetaanalysisRobustVariance2022]. This replaces the original's reliance on random
 intercepts alone [@nobleNonindependenceSensitivityAnalyses2017]. Heterogeneity will be decomposed as total
-and **partial *I*² per random factor** [`orchaRd::i2_ml`; @nakagawaOrchaRd20Package2023;
+and partial *I*² per random factor [`orchaRd::i2_ml`; @nakagawaOrchaRd20Package2023;
 @yangPluralisticFrameworkMeasuring2025; benchmarked against typical ecological values,
-@seniorHeterogeneityEcologicalEvolutionary2016], and results visualised with **orchard** and **bubble** plots
+@seniorHeterogeneityEcologicalEvolutionary2016], and results visualised with orchard and bubble plots
 (`orchaRd::orchard_plot`, `orchaRd::bubble_plot`).
 
-*Moderators.* We retain the original moderators — **variable type** (allocation / production-quantity /
-production-GSI / quality) and **sperm competition rank** — for comparability, keeping the original's
+*Moderators.* We retain the original moderators — variable type (allocation / production-quantity /
+production-GSI / quality) and sperm competition rank — for comparability, keeping the original's
 parameterization (one mean per level; interactions restricted within variable type) alongside the updated
 one, so that changes from the Q0 baseline can be attributed to the new data versus the new methods. New
-*a priori* moderators are: **index type** and **body mass** (Q1b), **experimental design** and
-**fertilization mode** (Q1c, Q1d), **tactic plasticity** and **minor tactic type** (Q1d), and **taxonomic
-group** (Q1e).
+*a priori* moderators are: index type and body mass (Q1b), experimental design and
+fertilization mode (Q1c, Q1d), tactic plasticity and minor tactic type (Q1d), and taxonomic
+group (Q1e).
 
 **Phylogenetic non-independence.** The original's phylogeny (Supplementary Figure 1) is an image with no
 stated source and no branch lengths, and was dropped from both meta-regressions. We will rebuild it
 explicitly: for fishes, from the ray-finned fish tree of life
 [@raboskyInverseLatitudinalGradient2018; via the `fishtree` R package, @changFishtreeRPackage2019], falling
-back to a synthetic tree from the **Open Tree of Life** [via `rotl`; @michonneauRotlPackageInteract2016] for
+back to a synthetic tree from the Open Tree of Life [via `rotl`; @michonneauRotlPackageInteract2016] for
 species absent from that resource and for the non-fish extension dataset. Names will be reconciled to
 accepted binomials (resolving, e.g., *Parablennius sanguinolentus parvicornis* vs. *P. parvicornis*, and
 *Rhodeus sericeus* vs. *R. amarus*, with the decision recorded), polytomies resolved at random into a
 strictly bifurcating topology [`ape::multi2di`; @paradisSchliepApe52019], and, where reliable branch lengths
-are unavailable, computed by **Grafen's** [-@grafenPhylogeneticRegression1989] method. From each ultrametric
-tree we derive a **phylogenetic correlation matrix** included as a random effect alongside the
+are unavailable, computed by Grafen's [-@grafenPhylogeneticRegression1989] method. From each ultrametric
+tree we derive a phylogenetic correlation matrix included as a random effect alongside the
 non-phylogenetic species effect, so that per-species and phylogenetic heterogeneity are estimated separately
 [interpretable as phylogenetic signal, @housworthPhylogeneticMixedModel2004]. Species the trees cannot place
 will be grafted next to a congener and this noted. We will report whether the original's decision to drop
 phylogeny is supported once the tree is properly sourced and the species set enlarged.
 
 **Testing the shape of the risk effect (Q1a).** We fit sperm competition risk three ways and report all
-three: (i) as the original's **unordered five-level factor** interacted with variable type, for
-comparability; (ii) as an **ordered/continuous** moderator with a **linear and quadratic term** within each
+three: (i) as the original's unordered five-level factor interacted with variable type, for
+comparability; (ii) as an ordered/continuous moderator with a linear and quadratic term within each
 variable type, which is the specification that can express Parker's
 [-@parkerSpermCompetitionGamesSneaks1990] hump-shaped prediction (support = a negative quadratic coefficient
 on |*g*|, i.e. a maximum difference at intermediate rank); and (iii) on the subset with a reported
-**proportion of minor males**, as a continuous meta-regression on that frequency. For each we report the
-**omnibus test of the moderator** and *R*²-analogues, which the original did not. Every rank-level estimate
-will be accompanied by the **number of contributing studies and species**, and the analysis will be repeated
+proportion of minor males, as a continuous meta-regression on that frequency. For each we report the
+omnibus test of the moderator and *R*²-analogues, which the original did not. Every rank-level estimate
+will be accompanied by the number of contributing studies and species, and the analysis will be repeated
 excluding ranks represented by a single species (which in the original data means excluding ranks 1 and 5).
 Because SCR is a species-level constant, we will note that its effect cannot be separated from other
 species-level differences, and will report the proportion of species-level heterogeneity it absorbs.
 
-**Testing whether the gonad result is allometric (Q1b).** We fit the production data with **index type**
-(relative index vs. absolute mass) as a moderator, with **body mass** (and body-mass dimorphism) as
+**Testing whether the gonad result is allometric (Q1b).** We fit the production data with index type
+(relative index vs. absolute mass) as a moderator, with body mass (and body-mass dimorphism) as
 covariates, and compare (i) the original's GSI-only specification, (ii) a specification retaining the 24
 previously deleted absolute-mass effect sizes, and (iii) an lnRR analysis of absolute gonad mass with body
 mass as a covariate. This approach constructively bridges the methodological frameworks of Del Matto (2018)
@@ -944,8 +944,8 @@ covariates. By modeling absolute gonad mass alongside male body mass and dimorph
 test of whether the minors-invest-more-in-relative-gonad-size hypothesis is supported when accounting for allometric
 scaling [@tomkinsMeasuringRelativeInvestment2002]. Sensitivity analyses drop one member of each `redundancyGroup` at a time.
 
-**Re-examining the allocation reversal (Q1c).** Within the allocation subset we fit **experimental design**
-(between-morph vs. within-male risk manipulation) and **fertilization mode** as moderators, report the number
+**Re-examining the allocation reversal (Q1c).** Within the allocation subset we fit experimental design
+(between-morph vs. within-male risk manipulation) and fertilization mode as moderators, report the number
 of studies and species behind every estimate, and run leave-one-study-out and leave-one-species-out re-fits
 targeted at the two studies that dominate the original estimate
 [@pilastroIndividualAdjustmentSperm2002; @pilastroBisazzaInseminationEfficiency1999]. Because Dougherty et al.
@@ -961,30 +961,30 @@ fails for external fertilizers [@parkerSpermCompetitionGamesSneaks1990; @taborsk
 
 **Taxonomic generality (Q1e).** The fish-only model is the primary analysis. We then incorporate the non-fish
 records compiled by Dougherty et al. [@doughertyMaleAlternativeReproductive2022] (insects, amphibians, reptiles,
-birds, mammals) alongside newly retrieved non-fish literature, fitting a combined model with **taxonomic group as
-a moderator** and the phylogenetic random effect spanning all species. We test (i) whether the major–minor
+birds, mammals) alongside newly retrieved non-fish literature, fitting a combined model with taxonomic group as
+a moderator and the phylogenetic random effect spanning all species. We test (i) whether the major–minor
 difference in each expenditure category differs between fishes and other taxa, and (ii) whether the (non-)effect
 of sperm competition risk generalises across the animal kingdom. We will report the number of studies and species
-per taxonomic group, designate the analysis **exploratory** if non-fish coverage is low or concentrated in one
+per taxonomic group, designate the analysis exploratory if non-fish coverage is low or concentrated in one
 clade, and in either case present the fish-only estimates as the headline results.
 
 **Comparing original vs. updated estimates.** Following Pollo et al.
 [@polloReliabilityMetaanalysesEcology2025], we will compare the original and updated estimates both
-**qualitatively** (sign/significance class: minors greater / majors greater / not different, by 95% CI
-overlap) and **quantitatively** (an absolute difference between estimates yielding a *z*-score > 1.96;
+qualitatively (sign/significance class: minors greater / majors greater / not different, by 95% CI
+overlap) and quantitatively (an absolute difference between estimates yielding a *z*-score > 1.96;
 two-tailed α = 0.05). The reproduction (Q0) estimates anchor this comparison, and comparisons will be made
 category by category (GSI, quantity, quality, allocation) as well as for the overall mean. Because the Q1
 variances are computed rather than approximated, we will additionally report the Q0 estimates re-fitted with
 the re-extracted variances, to separate "the data changed" from "the weights were never recoverable".
 
 **Sensitivity and influence analyses.** We will test the robustness of the updated pooled estimates with, at
-minimum: (1) **leave-one-study-out** and **leave-one-species-out** re-fits (recomputing the VCV matrix and
+minimum: (1) leave-one-study-out and leave-one-species-out re-fits (recomputing the VCV matrix and
 subsetting the phylogenetic correlation matrix each time; `orchaRd::leave_one_out`); (2) removal of
-statistical **outliers** (|standardized residual| > 3) and formal influence diagnostics
+statistical outliers (|standardized residual| > 3) and formal influence diagnostics
 [@viechtbauerCheungOutlierInfluence2010], reported separately for the eight archived rows with |*g*| > 8;
-(3) **directly calculated vs. inferential-statistic-derived vs. reconstructed** effect sizes (using
-`effectSizeProvenance`); (4) **new evidence vs. re-extracted-original** subsets, to see whether the update's
-conclusions rest on the new data or the original; (5) **within-cluster correlation** set to *r* = 0.3 and
+(3) directly calculated vs. inferential-statistic-derived vs. reconstructed effect sizes (using
+`effectSizeProvenance`); (4) new evidence vs. re-extracted-original subsets, to see whether the update's
+conclusions rest on the new data or the original; (5) within-cluster correlation set to *r* = 0.3 and
 *r* = 0.7 in the VCV matrix; (6) dropping one member of each `redundancyGroup`; (7) excluding
 sperm-competition ranks represented by a single species; and (8) excluding the most over-represented clade
 (salmonids, 30% of the original's rows) to check taxonomic dominance. We will report the largest shift in any
@@ -992,22 +992,22 @@ pooled mean across these analyses.
 
 ## 3.10. Publication / dissemination bias
 
-The original assessed bias only with the **intercept of an Egger's regression** on each of its three models
+The original assessed bias only with the intercept of an Egger's regression on each of its three models
 [@eggerBiasMetaanalysisDetected1997], reporting no funnel plots, no time-lag analysis and no outlier
 analysis. Applying current practice [@nakagawaMethodsTestingPublication2022] to the whole updated dataset, we
-will assess bias by: (1) a **multilevel Egger's regression** — a two-step approach following the parallel
+will assess bias by: (1) a multilevel Egger's regression — a two-step approach following the parallel
 `mate_choice_meta` update: we first include the SE (√variance) of effect sizes as a moderator (intercept ≠ 0
-at *P* ≤ 0.05 flags small-study effects) and, if the slope is significant, **re-fit with the sampling
-variance as the moderator** to read off a less-biased adjusted mean; (2) a **funnel plot** of model residuals
-against precision; (3) a **time-lag bias** check including publication year (and an original-vs-new evidence
+at *P* ≤ 0.05 flags small-study effects) and, if the slope is significant, re-fit with the sampling
+variance as the moderator to read off a less-biased adjusted mean; (2) a funnel plot of model residuals
+against precision; (3) a time-lag bias check including publication year (and an original-vs-new evidence
 indicator) as moderators, which is of particular interest here because the original's evidence base spans
-1995–2017 and the update adds roughly nine further years; and (4) inspection of **outliers** (|standardized residual| > 3) with sensitivity analyses removing them. In addition, we will estimate the **bias-corrected overall
-mean under two complementary frameworks** and compare them directly: the Nakagawa et al.
+1995–2017 and the update adds roughly nine further years; and (4) inspection of outliers (|standardized residual| > 3) with sensitivity analyses removing them. In addition, we will estimate the bias-corrected overall
+mean under two complementary frameworks and compare them directly: the Nakagawa et al.
 [@nakagawaMethodsTestingPublication2022] sampling-variance intercept method (the mean at zero sampling
-error), and a **bias-robust** common-effects GLS weighting combined with cluster-robust CR2 variances
+error), and a bias-robust common-effects GLS weighting combined with cluster-robust CR2 variances
 [@yangPublicationBiasImpacts2023], overlaid on an orchard plot (`orchaRd::pub_bias_plot`). We will also
 report the Egger intercepts in the original's parameterization for continuity. Finally, because the dominant
-selective process in this literature is plausibly **selective reporting of traits within studies** rather
+selective process in this literature is plausibly selective reporting of traits within studies rather
 than non-publication of whole studies, we will report, per study, the number of ejaculate traits measured
 versus the number for which a morph comparison is reported, and treat any shortfall as a qualitative bias
 indicator that the funnel-based diagnostics cannot capture.
