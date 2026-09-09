@@ -57,14 +57,15 @@ nocite: |
     [@doughertyMaleAlternativeReproductive2022], alongside the original Del Matto
     [@delmattoSpermCompetitionGames2018] MSc dissertation baseline. Formally structured into a three-way
     reconciliation framework: (1) **Q0a** reproduces the Del Matto (2018) baseline (50 teleost studies, 29
-    species, 183 effect sizes reconciled from 207 raw rows via programmatic exclusion of 24 absolute gonad
-    mass rows); (2) **Q0b** cross-checks and reconciles with Dougherty et al. (2022; 92 animal studies, 58 fish
-    studies, with 31 shared studies, 19 teleost studies in Del Matto missed by Dougherty, and 27 fish studies
-    unique to Dougherty); and (3) **Q1** unites both datasets with post-2020 literature (harvested
-    programmatically via the OpenAlex API pipeline `scripts/fetch_openalex.py`) into a definitive, fully
-    reproducible publication. Formally incorporates continuous allometric modeling (Q1b) to test Dougherty et
-    al.'s "GSI ratio artifact" claim, restores behavioral per-spawn allocation (Q1c, omitted by Dougherty), and
-    implements quadratic polynomial meta-regression (Q1a) to test Parker's (1990) intermediate-risk prediction.
+    species, 183 effect sizes reconciled from 207 raw rows via programmatic exclusion of 24 absolute gonad mass
+    rows); (2) **Q0b** cross-checks and reconciles with Dougherty et al. (2022; 92 animal studies, 58 fish
+    studies, with 31 shared studies, 19 teleost studies from Del Matto's fish-focused search, and 27 fish
+    studies from Dougherty's broad-taxa search); and (3) **Q1** unites both datasets with post-2020 literature
+    (harvested programmatically via the OpenAlex API pipeline `scripts/fetch_openalex.py`) into a definitive,
+    fully reproducible publication. Formally incorporates continuous bivariate allometric modeling (Q1b) to address
+    the methodological questions raised by Dougherty et al. regarding GSI ratio scaling, integrates behavioral
+    per-spawn allocation (Q1c) alongside static traits, and implements quadratic polynomial meta-regression (Q1a)
+    to test Parker's (1990) intermediate-risk prediction.
 - **Version 0.1** (28 Jul, 2026) — Eduardo S. A. Santos
   - Initial draft of update protocol (adapted from the parallel `alien_predator_meta` and
     `mate_choice_meta` update protocols in this lab). Reproduce-then-update design adapted to an
@@ -113,7 +114,7 @@ During the preparation of this work, the authors used AI-assisted tools to check
 
 ## 1.7. Data availability statement
 
-All relevant data and analysis code will be made available in a publicly accessible repository (e.g., Borealis, https://borealisdata.ca/, and/or the Open Science Framework). This project provides four distinct open-science deliverables: (1) the machine-readable reconstructed and reconciled Del Matto (2018) baseline dataset (`data/input/delmatto2018_supp_table1.csv` and `data/output/delmatto2018_reconciled.csv`), resolving the 183-vs-207 effect-size count discrepancy; (2) the Dougherty et al. (2022) reconciled dataset (`data/input/dougherty2022_all_data.xlsx`), documenting study-level overlap and empirical divergence; (3) the automated OpenAlex literature retrieval pipeline (`scripts/fetch_openalex.py` and `data/output/openalex_update_candidates.csv`), enabling transparent forward citation chasing and Boolean query reproduction; and (4) the fully re-extracted master dataset with per-morph means, standard deviations, and exact sampling variances computed via `metafor::escalc`, accompanied by a curated ray-finned fish phylogeny and complete Typst/Python reproduction scripts. Remedying the original dissertation's reproducibility gap [see @rocheHowWellAre2015] while critically evaluating and updating recent syntheses [@doughertyMaleAlternativeReproductive2022] is an explicit deliverable of this project.
+All relevant data and analysis code will be made available in a publicly accessible repository (e.g., Borealis, https://borealisdata.ca/, and/or the Open Science Framework). This project provides four distinct open-science deliverables: (1) the machine-readable reconstructed and reconciled Del Matto (2018) baseline dataset (`data/input/delmatto2018_supp_table1.csv` and `data/output/delmatto2018_reconciled.csv`), resolving the 183-vs-207 effect-size count discrepancy; (2) the Dougherty et al. (2022) reconciled dataset (`data/input/dougherty2022_all_data.xlsx`), documenting study-level overlap and complementary coverage; (3) the automated OpenAlex literature retrieval pipeline (`scripts/fetch_openalex.py` and `data/output/openalex_update_candidates.csv`), enabling transparent forward citation chasing and Boolean query reproduction; and (4) the fully re-extracted master dataset with per-morph means, standard deviations, and exact sampling variances computed via `metafor::escalc`, accompanied by a curated ray-finned fish phylogeny and complete Typst/Python reproduction scripts. Remedying the original dissertation's reproducibility gap [see @rocheHowWellAre2015] while constructively building upon, reconciling, and updating recent synthetic benchmarks [@doughertyMaleAlternativeReproductive2022] is an explicit deliverable of this project.
 
 ## 1.8. Competing interests statement
 
@@ -188,15 +189,15 @@ interrogated. Sixth, the **search ended in May 2017**, predating roughly nine ye
 substantial theoretical and synthetic re-examination of sperm competition in ART species
 [@kustraAlonzoSpermAlternativeReproductive2023; @lupoldHowSpermCompetition2020].
 
-Crucially, the empirical and theoretical landscape shifted substantially with the publication of a broad-taxa meta-analysis by Dougherty et al. [@doughertyMaleAlternativeReproductive2022], which synthesized 92 studies across 67 animal species (including 58 fish studies) with searches concluding in late 2020. Dougherty et al. concluded that evidence for ejaculate divergence between male tactics was surprisingly weak across animals, and specifically argued that higher relative testes investment in minor males was largely an artifact of gonadosomatic index (GSI) ratio scaling rather than genuine evolutionary divergence.
+Crucially, the empirical and theoretical landscape advanced substantially with the publication of a landmark broad-taxa meta-analysis by Dougherty et al. [@doughertyMaleAlternativeReproductive2022], which synthesized 92 studies across 67 animal species (including 58 fish studies) with searches concluding in late 2020. Dougherty et al. provided the first comprehensive animal-wide evaluation of male alternative reproductive tactics, concluding that evidence for ejaculate divergence across animals was subtle, and constructively highlighting that gonadosomatic index (GSI) ratios can introduce scaling artifacts when male morphs differ markedly in body size [@tomkinsMeasuringRelativeInvestment2002].
 
-However, a systematic cross-examination of Dougherty et al.'s [@doughertyMaleAlternativeReproductive2022] dataset and analytical choices reveals critical empirical omissions and unresolved theoretical controversies that warrant a comprehensive, reconciled update:
+The existence of Dougherty et al.'s [@doughertyMaleAlternativeReproductive2022] synthesis alongside Del Matto's [@delmattoSpermCompetitionGames2018] fish-focused baseline creates an exceptional opportunity for cross-synthesis reconciliation, mutual refinement, and an updated, definitive test of sperm competition theory:
 
-1. **Omission of behavioral sperm allocation:** While Del Matto [@delmattoSpermCompetitionGames2018] identified a massive, statistically resolved effect whereby majors allocate substantially more sperm per mating act (+2.732, 95% CI +1.476 to +3.989; 11 effect sizes across 4 studies), Dougherty et al. [@doughertyMaleAlternativeReproductive2022] completely omitted per-spawn behavioral allocation, collapsing all sperm metrics into static stripped counts or morphology. Behavioral allocation is central to game-theoretic models of sperm expenditure [@parkerPizzariSpermCompetitionEjaculate2010; @wedellSpermCompetitionMale2002], where bourgeois males conserve sperm across multiple matings while sneakers exhaust ejaculates in single opportunistic spawns.
-2. **Failure to test Parker's non-linear risk prediction:** Parker's [-@parkerSpermCompetitionGamesSneaks1990] sneak–guard model explicitly predicts a non-monotonic, hump-shaped relationship—the expenditure difference between tactics peaks at intermediate sperm competition risk and converges at both extremes. Dougherty et al. [@doughertyMaleAlternativeReproductive2022] tested sneaker frequency solely as a linear predictor, reporting a non-significant slope and concluding that risk does not modulate divergence, entirely bypassing the theoretical quadratic prediction.
-3. **The GSI allometry controversy:** Dougherty et al. [@doughertyMaleAlternativeReproductive2022] rightly noted that GSI is a ratio metric that can mislead when body size differs between morphs [@tomkinsMeasuringRelativeInvestment2002]. However, their solution was to drop GSI entirely (finding no significant difference in absolute testis mass when ignoring body size), whereas Del Matto [@delmattoSpermCompetitionGames2018] dropped absolute testis mass (24 effect sizes) to avoid duplicating GSI. Neither study conducted a rigorous bivariate allometric meta-regression that models absolute gonad mass with male body mass and dimorphism as continuous covariates.
-4. **Empirical gaps and missed teleost literature:** Cross-referencing Del Matto's 50 teleost studies with Dougherty et al.'s 58 fish studies reveals that while 31 studies are shared, Dougherty et al. missed **19 teleost studies** already present in Del Matto's baseline (including key experimental tests of sperm allocation, such as Pilastro et al. 2002 *PNAS*), while identifying 27 teleost studies not included in Del Matto's 2017 search.
-5. **Temporal coverage:** Dougherty et al.'s search terminated in October 2020. Over five years of recent empirical literature (2021–2026) have since been published and remain unsynthesized.
+1. **Integrating behavioral sperm allocation with static traits:** While broad cross-taxa syntheses like Dougherty et al. [@doughertyMaleAlternativeReproductive2022] understandably focused on static ejaculate metrics (such as stripped counts and sperm morphology) that can be standardized across diverse animal phyla, fish systems uniquely offer rich experimental data on *in vivo* behavioral sperm allocation per spawning event. Del Matto [@delmattoSpermCompetitionGames2018] found that major males allocate substantially more sperm per mating act (+2.732, 95% CI +1.476 to +3.989; 11 effect sizes across 4 studies). Reconciling this behavioral dimension alongside static ejaculate capacity is essential, as game-theoretic models explicitly predict that bourgeois males prudently economize ejaculate expenditure across successive matings, whereas sneakers expend greater effort per mating act [@parkerPizzariSpermCompetitionEjaculate2010; @wedellSpermCompetitionMale2002].
+2. **Testing non-linear risk predictions:** Parker's [-@parkerSpermCompetitionGamesSneaks1990] sneak–guard model explicitly predicts a non-monotonic, hump-shaped relationship—the expenditure difference between tactics peaks at intermediate sperm competition risk and converges at both extremes. Dougherty et al. [@doughertyMaleAlternativeReproductive2022] evaluated sneaker frequency as a linear moderator, reporting a non-significant slope. Because theory specifically predicts an intermediate peak rather than a monotonic gradient, evaluating a quadratic polynomial model ($SCR + SCR^2$) provides a direct test of Parker's hump-shaped expectation.
+3. **Resolving the GSI allometry question:** Dougherty et al. [@doughertyMaleAlternativeReproductive2022] correctly emphasized the methodological challenges of interpreting ratio-based indices such as GSI when body sizes differ between morphs [@tomkinsMeasuringRelativeInvestment2002]. In their primary analyses, Dougherty et al. focused on absolute testis mass, finding no significant overall difference when body mass was not accounted for. Conversely, Del Matto [@delmattoSpermCompetitionGames2018] focused on GSI, excluding absolute gonad mass (24 rows) to prevent duplicate counting. Rather than treating these approaches as mutually exclusive, our synthesis bridges this debate through continuous bivariate allometric meta-regression, modeling absolute gonad mass as a function of male body mass and tactic-specific dimorphism.
+4. **Synthesizing complementary literature bases:** Comparing the 50 teleost studies in Del Matto (2018) with the 58 fish studies in Dougherty et al. (2022) reveals substantial complementarity: 31 studies are shared, while **19 teleost studies** were uniquely identified by Del Matto's fish-specific search (including experimental studies of sperm allocation; e.g., Pilastro et al. 2002 *PNAS*), and **27 fish studies** were newly identified in Dougherty et al.'s broader search. Uniting both datasets captures the full depth of the historical fish literature.
+5. **Temporal update:** With Dougherty et al.'s search concluding in October 2020, over five years of active empirical research (2021–2026) are now available. Integrating this recent literature provides a timely, cumulative update of the global evidence base.
 
 Beyond these features, the original leaves the **theory's central prediction only partly tested**. Parker's
 [-@parkerSpermCompetitionGamesSneaks1990] second prediction is explicitly **curvilinear** and is written in
@@ -217,9 +218,10 @@ Foundational evidence syntheses should be reproduced, replicated, and updated
 question with new data and/or methods; **updating** incorporates newly available evidence to test whether
 conclusions hold over time, draws on a larger and more diverse evidence base, and allows newer, more robust
 analytical methods to be applied [@korichevaHandbookMetaanalysisEcology2013]. Given the elapsed time since both
-prior syntheses, the unrecoverable sampling variances in the dissertation, the empirical omissions in Dougherty
-et al. (2022), and the unresolved GSI allometry controversy, an integrated reconciliation and update is
-essential to bring Del Matto's (2018) foundational baseline to formal publication.
+prior syntheses, the opportunity to reconstruct exact sampling variances for the dissertation baseline, the
+complementary coverage across both datasets, and the valuable allometric questions raised by Dougherty et al.
+(2022), an integrated reconciliation and update provides an ideal framework to synthesize the field's evidence base
+and bring Del Matto's (2018) baseline to formal publication.
 
 ## 2.1. Aims and questions
 
@@ -238,11 +240,13 @@ integrated master synthesis (Q1):
     type × SCR) in R? This establishes the historical baseline. Q0a has six named steps set out in §3.1,
     including **confirming the 183-vs-207 effect-size count reconciliation** in code via the 24-gonad-mass
     exclusion rule.
-  - **Q0b (cross-reconcile with Dougherty et al. 2022):** What explains the empirical and methodological discordance
-    between Del Matto (2018) and Dougherty et al. (2022)? We directly audit study-level overlap and divergence:
-    the **31 shared teleost studies**, the **19 fish studies present in Del Matto but missed by Dougherty**, and
-    the **27 teleost studies present only in Dougherty**; audit trait definitions (documenting why behavioral
-    allocation was omitted); and assess the impact of their contrasting GSI exclusion choices.
+  - **Q0b (cross-reconciliation with Dougherty et al. 2022):** How do the empirical evidence bases and methodological
+    choices of Del Matto (2018) and Dougherty et al. (2022) complement and inform one another? We systematically
+    audit study-level overlap and scope: the **31 shared teleost studies**, the **19 fish studies uniquely captured
+    in Del Matto's fish-focused search**, and the **27 fish studies newly captured in Dougherty et al.'s broad-taxa
+    search**; align trait definitions (integrating behavioral per-spawn allocation with static ejaculate traits);
+    and evaluate how allometric modeling of testis investment compares with both ratio-based (GSI) and absolute mass
+    analyses.
   - **Q1 (updated master synthesis):** When we unite both baselines into an expanded master dataset, re-extract
     all studies at the per-morph level so sampling variances are computed rather than approximated, incorporate
     contemporary post-2020 literature (harvested programmatically via OpenAlex), and apply contemporary multilevel
@@ -264,14 +268,14 @@ Within Q1 we formally address five central evolutionary issues:
   moderator with a **quadratic term** ($SCR + SCR^2$) and report the omnibus test of the moderator (which neither
   prior synthesis did), testing whether divergence follows a hump-shaped curve. Where reported, we additionally
   use the **proportion of minor males in the population** as a continuous moderator on the reporting subset.
-- **Q1b (is the gonad-investment result allometric or a GSI artifact?):** Resolving the direct conflict between
-  Del Matto (minors invest dramatically more in GSI, $g = -2.638$) and Dougherty et al. (GSI is an artifact, no
-  effect in absolute testis mass), we **retain both GSI and all 24 absolute gonad mass rows**, fitting a
-  **bivariate allometric meta-regression** with male body mass and body-mass dimorphism as continuous covariates.
-  We explicitly test whether minors maintain disproportionate gonadal investment after accounting for allometric
-  scaling [@tomkinsMeasuringRelativeInvestment2002].
-- **Q1c (is the behavioral allocation reversal real?):** Del Matto reported that **majors allocate significantly
-  more sperm per spawn (+2.732, +1.476 to +3.989)**—an effect omitted by Dougherty et al. [@doughertyMaleAlternativeReproductive2022].
+- **Q1b (allometric scaling vs. ratio-based testis investment):** Addressing the valuable methodological distinction
+  highlighted by Dougherty et al. (2022) regarding GSI ratio scaling versus absolute testis mass, we **retain both
+  GSI and all 24 absolute gonad mass rows**, fitting a **bivariate allometric meta-regression** with male body mass
+  and body-mass dimorphism as continuous covariates. We explicitly test whether minors maintain disproportionate
+  gonadal investment after accounting for allometric scaling [@tomkinsMeasuringRelativeInvestment2002].
+- **Q1c (behavioral sperm allocation per mating):** Del Matto reported that **majors allocate significantly
+  more sperm per spawn (+2.732, +1.476 to +3.989)**, representing a dynamic behavioral dimension of ejaculate
+  economy that complements the static morphological traits synthesized by Dougherty et al. [@doughertyMaleAlternativeReproductive2022].
   With the reconciled and updated evidence base, we re-estimate this allocation effect while (i) separating
   **between-morph comparisons** from **within-male experimental manipulations of perceived risk**, (ii) separating
   **internal from external fertilizers**, and (iii) evaluating whether bourgeois males exhibit greater per-mating
@@ -296,13 +300,13 @@ Dougherty et al. (2022) benchmark (Q0b), and the present updated synthesis (Q1).
 | Methodological Dimension | Del Matto (2018) (Q0a Baseline) | Dougherty et al. (2022) Benchmark (Q0b) | This Updated Synthesis (Q1 Publication) |
 | :--- | :--- | :--- | :--- |
 | **Scope & Taxa** | Fishes only (50 studies, 29 species, 183 effect sizes) | All animals (92 studies, 67 species; 58 fish studies) | Reconciled fishes master set + post-2020 literature update + non-fish extension |
-| **Study Overlap & Gaps** | Archived 50 fish studies (1995–2017) | Shared 31 fish studies; missed 19 fish studies present in Del Matto | Full reconciliation (31 shared + 19 Del Matto + 27 Dougherty fish + post-2020) |
-| **Behavioral Allocation** | Formal category ($k = 11, g = +2.732$; majors allocate more per spawn) | Omitted / collapsed (focused only on stripped/stored sperm counts) | Core functional axis testing ejaculate economy during mating interactions |
-| **Testes & GSI Allometry** | GSI only ($k = 31, g = -2.638$); 24 absolute mass rows excluded | Argued GSI is an artifact; found no effect when excluding GSI | Bivariate meta-regression modeling body mass & dimorphism as continuous allometric covariates |
-| **Sperm Competition Proxy** | 5-level categorical SCR (Stockley 1997); extreme ranks 1 & 5 confounded | Sneaker frequency (linear test only); found no effect | Continuous quadratic polynomial testing Parker's intermediate peak + continuous frequency |
+| **Study Overlap & Scope** | Archived 50 fish studies (1995–2017) | Shared 31 fish studies; 27 fish studies unique to broad search (19 fish studies unique to Del Matto) | Full synthesis uniting both scopes (31 shared + 19 fish Del Matto + 27 fish Dougherty + post-2020) |
+| **Behavioral Allocation** | Formal category ($k = 11, g = +2.732$; majors allocate more per spawn) | Not evaluated (focused on standardized static ejaculate metrics across phyla) | Core functional axis testing ejaculate economy during mating interactions |
+| **Testes & GSI Allometry** | GSI only ($k = 31, g = -2.638$); 24 absolute mass rows excluded | Focused on absolute testis mass to avoid ratio scaling artifacts | Bivariate meta-regression modeling body mass & dimorphism as continuous allometric covariates |
+| **Sperm Competition Proxy** | 5-level categorical SCR (Stockley 1997); extreme ranks 1 & 5 confounded | Sneaker frequency (linear test); evaluated cross-taxa gradient | Continuous quadratic polynomial testing Parker's intermediate peak + continuous frequency |
 | **Phylogeny** | Vector art tree without branch lengths; dropped from final models | Open Tree of Life synthetic tree (`rotl`) | Calibrated Ray-finned fish tree (Rabosky / `fishtree`) with Grafen branch lengths |
 | **Variance & Provenance** | Single total $N$ per row; sampling variances not archived | Re-extracted per-morph statistics for included subset | Complete re-extraction with exact variances via `metafor::escalc`; fully open data |
-| **Overall Goal** | Original MSc dissertation (unpublished) | Broad-taxa published meta-analysis (*Biol Rev*) | Definitive, reproducible publication resolving allometry & non-linear risk |
+| **Overall Goal** | Original MSc dissertation (unpublished) | Landmark broad-taxa animal benchmark (*Biol Rev*) | Definitive, reproducible publication resolving allometry & non-linear risk |
 
 ## 2.2. Interpretive scope and a priori caveats
 
@@ -370,9 +374,9 @@ flow diagram [@moherPreferredReportingItems2009]; we will publish an updated PRI
 distinguishes original from newly identified records.
 
 Because the original study is an **unpublished dissertation with no deposited dataset and no analysis
-code**, we cannot re-execute an archived repository directly. Furthermore, because a major published meta-analysis
-on the same topic [@doughertyMaleAlternativeReproductive2022] reached conflicting conclusions and used different
-inclusion filters, our preparatory baseline proceeds in two coordinated reproduction and reconciliation phases:
+code**, we cannot re-execute an archived repository directly. Furthermore, because a landmark broad-taxa meta-analysis on this topic by Dougherty et al.
+[@doughertyMaleAlternativeReproductive2022] applied distinct inclusion filters and highlighted crucial allometric
+nuances, our preparatory baseline proceeds in two coordinated reproduction and reconciliation phases:
 **Q0a (Del Matto 2018 baseline reproduction)** and **Q0b (Dougherty et al. 2022 cross-synthesis reconciliation)**.
 
 ### 3.1.1. Q0a: Reproducing the Del Matto (2018) baseline
@@ -439,16 +443,16 @@ cross-reconciliation with Dougherty et al. [@doughertyMaleAlternativeReproductiv
 
 1. **Dataset ingestion and standardization:** Ingest Dougherty et al.'s open dataset from Figshare
    (`data/input/dougherty2022_all_data.xlsx`), standardizing taxonomic names, study DOIs, and trait categories.
-2. **Study overlap and gap analysis:** Cross-reference study identities against Del Matto (2018). Of the 58
+2. **Study overlap and scope analysis:** Cross-reference study identities against Del Matto (2018). Of the 58
    teleost studies in Dougherty et al. and the 50 in Del Matto:
    - **31 studies are shared** between both syntheses.
-   - **19 teleost studies in Del Matto were missed by Dougherty et al.**, including critical behavioral allocation
-     experiments (e.g. Pilastro et al. 2002 *PNAS*) and seminal goby/salmonid studies.
-   - **27 teleost studies in Dougherty et al. were absent from Del Matto**, representing post-2017 publications and
-     older literature captured under Dougherty's search strings.
-3. **Trait category mapping and allocation audit:** Map Dougherty et al.'s trait classes to Del Matto's four
-   categories. We document why Dougherty et al. completely omitted behavioral per-spawn allocation traits, and
-   assess the quantitative impact of this omission on overall post-copulatory divergence estimates.
+   - **19 teleost studies in Del Matto were unique to the fish-specific search**, including experimental studies of
+     behavioral sperm allocation (e.g. Pilastro et al. 2002 *PNAS*) and seminal goby/salmonid studies.
+   - **27 teleost studies in Dougherty et al. were uniquely captured under their search criteria**, representing
+     valuable post-2017 additions and complementary historical literature.
+3. **Trait category mapping and scope alignment:** Map Dougherty et al.'s trait classes to Del Matto's four
+   categories. We evaluate how the incorporation of behavioral per-spawn allocation traits enriches static ejaculate
+   metrics, and assess how both trait types contribute to overall post-copulatory divergence estimates.
 4. **Effect-size cross-validation on shared studies:** For the 31 shared studies, compare calculated effect sizes
    between Del Matto's archived values, Dougherty et al.'s reported values, and our primary per-morph re-extractions,
    quantifying extractor concordance and diagnosing any systematic divergence in effect-size calculation.
@@ -907,22 +911,22 @@ species-level differences, and will report the proportion of species-level heter
 (relative index vs. absolute mass) as a moderator, with **body mass** (and body-mass dimorphism) as
 covariates, and compare (i) the original's GSI-only specification, (ii) a specification retaining the 24
 previously deleted absolute-mass effect sizes, and (iii) an lnRR analysis of absolute gonad mass with body
-mass as a covariate. This directly adjudicates the conflict between Del Matto (2018) and Dougherty et al.
-[@doughertyMaleAlternativeReproductive2022]: Dougherty et al. argued that higher minor testes mass was an
-artifact of GSI ratio scaling, but dropped GSI entirely rather than modeling body size. By modeling absolute
-gonad mass alongside male body mass and dimorphism continuously, we explicitly test whether the
-minors-invest-more-in-relative-gonad-size conclusion is robust to allometrically appropriate treatment
-[@tomkinsMeasuringRelativeInvestment2002]. Sensitivity analyses drop one member of each `redundancyGroup` at a time.
+mass as a covariate. This approach constructively bridges the methodological frameworks of Del Matto (2018)
+and Dougherty et al. [@doughertyMaleAlternativeReproductive2022]: while Dougherty et al. appropriately highlighted
+the risk of ratio scaling artifacts in GSI, their primary models evaluated absolute testis mass without body-mass
+covariates. By modeling absolute gonad mass alongside male body mass and dimorphism continuously, we provide a unified
+test of whether the minors-invest-more-in-relative-gonad-size hypothesis is supported when accounting for allometric
+scaling [@tomkinsMeasuringRelativeInvestment2002]. Sensitivity analyses drop one member of each `redundancyGroup` at a time.
 
 **Re-examining the allocation reversal (Q1c).** Within the allocation subset we fit **experimental design**
 (between-morph vs. within-male risk manipulation) and **fertilization mode** as moderators, report the number
 of studies and species behind every estimate, and run leave-one-study-out and leave-one-species-out re-fits
 targeted at the two studies that dominate the original estimate
 [@pilastroIndividualAdjustmentSperm2002; @pilastroBisazzaInseminationEfficiency1999]. Because Dougherty et al.
-[@doughertyMaleAlternativeReproductive2022] omitted per-spawn behavioral allocation entirely, our re-estimation
-provides the only contemporary, phylogenetically controlled assessment of whether majors exhibit greater
-per-spawn sperm economy during mating events, evaluated against strategic ejaculation theory
-[@kellyJennionsSexualSelectionSperm2011; @wedellSpermCompetitionMale2002].
+[@doughertyMaleAlternativeReproductive2022] focused on static ejaculate metrics across broad animal taxa, our
+re-estimation complements their synthesis by providing a contemporary, phylogenetically controlled assessment of
+whether majors exhibit greater per-spawn sperm economy during mating events, evaluated against strategic
+ejaculation theory [@kellyJennionsSexualSelectionSperm2011; @wedellSpermCompetitionMale2002].
 
 **Tactic architecture and model assumptions (Q1d).** We fit fertilization mode, tactic plasticity and minor
 tactic type as moderators, and their interactions with sperm competition risk where cell counts permit,
@@ -971,8 +975,7 @@ at *P* ≤ 0.05 flags small-study effects) and, if the slope is significant, **r
 variance as the moderator** to read off a less-biased adjusted mean; (2) a **funnel plot** of model residuals
 against precision; (3) a **time-lag bias** check including publication year (and an original-vs-new evidence
 indicator) as moderators, which is of particular interest here because the original's evidence base spans
-1995–2017 and the update adds roughly nine further years; and (4) inspection of **outliers** (|standardized residual|
-> 3) with sensitivity analyses removing them. In addition, we will estimate the **bias-corrected overall
+1995–2017 and the update adds roughly nine further years; and (4) inspection of **outliers** (|standardized residual| > 3) with sensitivity analyses removing them. In addition, we will estimate the **bias-corrected overall
 mean under two complementary frameworks** and compare them directly: the Nakagawa et al.
 [@nakagawaMethodsTestingPublication2022] sampling-variance intercept method (the mean at zero sampling
 error), and a **bias-robust** common-effects GLS weighting combined with cluster-robust CR2 variances
