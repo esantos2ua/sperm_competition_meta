@@ -1,0 +1,365 @@
+---
+title: "meta-analysis-script"
+author: "Lygia A. Del Matto & Eduardo S.A. Santos"
+date:  "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+bibliography: reference.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading data, tree and libraries
+
+I found a paper by Betancur-R et al. [-@Betancur-R2017] that contains a very recent phylogeny of fishes. I need to check whether all species are in it.
+
+```{r loading}
+
+library(ape)
+library(geiger)
+library(phytools)
+library(sensiPhy)
+library(metafor)
+library(dplyr)
+library(ggplot2)
+
+dat <- read.csv("data_for_analysis.csv", sep=";")
+
+tree <- read.tree("fish_tree.tre")
+
+dat$es.id <- 1:length(dat$authors)
+```
+
+### Checking which spp in the phylogeny are not in the meta-analytic dataset
+
+```{r preparing_data}
+uniq_spp <- data.frame(spp = sort(unique(dat$animal_on_tree))) # creating list of unique spp to check names in phylogeny
+row.names(uniq_spp) <- uniq_spp$spp
+
+phy <- compute.brlen(tree, method="Grafen") # Ultrametricize tree (ultrametric tree means that all the tips are equally distant from the root)
+
+namecheck <- name.check(phy,uniq_spp) # checking which spp are not on phylogeny
+species <- namecheck$data_not_tree
+
+for(i in 1:length(species)) phy <- add.species.to.genus(phy,species[i],where="root") # adding species that are in the data but not on the tree to the phylogeny
+
+namecheck1 <- name.check(phy,uniq_spp) # checking which spp are not on phylogeny after inclusion of the spp that weren't originally on the phylogeny
+
+phy_ma <- drop.tip(phy, which(!phy$tip.label %in% dat$animal_on_tree)) # Prunning tree to the species that are in the effect size data.frame:
+
+phy_ma <- compute.brlen(phy_ma, method="Grafen")
+```
+
+Plotting the phylogeny
+
+```{r plot_phy_ma}
+plot(phy_ma)
+```
+
+
+## Plotting effect sizes that we calculated in Excel:
+
+```{r}
+
+forest(dat$es_hedges_g, dat$es_var)
+
+```
+
+
+## Meta-regression model:
+Lygia and I discussed in the last meeting that we should remove from the dataset all the variables under **Production** that quantify absolute testes size. The problem with these variables is that they are dependent on the absolute size of the animals, and increases or decreases in absolute testes mass do not translate nicely to differences in effect size.
+
+I will run the model using the predictor **variable.type1**. This variable treats GSI as a different type of **production** variable, given that it should have its own distinct behaviour.
+```{r remove_abs_testes}
+## Removing all effect sizes that were estimated from absolute testes mass:
+dat <- subset(dat, is_abs_gonad_size == 0)
+dat <- droplevels(dat)
+
+metareg <- rma(yi = es_hedges_g, vi = es_var, mod = ~variable.type1 - 1, method = "REML", data = dat)
+summary(metareg)
+```
+
+## Plotting relationship between ES and moderators:
+
+```{r plot_ES, cache=TRUE}
+(p1 <- ggplot(data = dat, aes(x = sperm_comp_cat, y = es_hedges_g)) +
+          geom_boxplot() +
+          facet_grid(.~variable.type)
+ )
+```
+
+## Plotting relationship between ES and moderators. Removed outliers that had ES over 10 or below -10:
+```{r plot_no_outlier, cache=TRUE}
+which(dat$es_hedges_g >= 10) # identifying outliers
+which(dat$es_hedges_g <= -10)  # identifying outliers
+dat_no_outlier <- dat[-c(50,108,109,143,110,111),] # removing outliers
+
+(p2 <- ggplot(data = dat_no_outlier, aes(x = factor(sperm.comp.rank), y = es_hedges_g, colour = variable.type)) +
+          geom_boxplot() 
+ )
+
+table(dat_no_outlier$variable.type,dat_no_outlier$sperm_comp_cat)
+
+(p3 <- ggplot(data = dat_no_outlier, aes(x = sperm.comp.rank, y = es_hedges_g, colour = variable.type)) +
+          geom_jitter() +
+          stat_smooth(method = "lm", se=FALSE)
+ )
+
+(p4 <- ggplot(data = dat_no_outlier, aes(x = sperm_comp_cat, y = es_hedges_g)) +
+          geom_boxplot() +
+          facet_grid(is_gsi~variable.type)
+ )
+
+(p5 <- ggplot(data = dat_no_outlier, aes(x = factor(sperm.comp.rank), y = es_hedges_g)) +
+          geom_boxplot() +
+          facet_grid(is_gsi~variable.type)
+ )
+
+table(dat_no_outlier$variable.type,dat_no_outlier$type.of.study)
+
+```
+
+
+## Multi-level meta-analysis model:
+
+Null model. Here we can estimate the mean overall meta-analytic effect size. I included the paper_ID, species_ID and phylogeny as random effects. Note that I am using a variable called **animal_on_tree** as the species_ID, this is the matched name of the species in our dataset to what is available on the tree. When our species is not on the tree, I found the closest relative and attributed that identity to our data. The variable **phylo** is just a copy of **animal_on_tree** that will be used to map the phylogeny onto the correlation matrix.
+
+```{r multilvl_null}
+cor <- vcv(phy_ma, corr = T)
+dat$phylo <- dat$animal_on_tree
+
+multilvl_null <- rma.mv(yi = es_hedges_g, V = es_var, mod = ~ 1, random = list(~1 | paper.number, ~1 | animal_on_tree, ~1 | phylo), R = list(phylo = cor), method = "REML", data = dat)
+summary(multilvl_null)
+```
+
+**After removing the absolute testes size effect sizes, overall, minor males invest more into sperm competition than majors. However, note that the 95% CI overlaps zero. Regardless of variable type or level of sperm competition.**
+
+Let's calculate the heterogeneity and egger regression:
+
+```{r multilvl_null_heterogeneity}
+dat$wi <- 1/sqrt(dat$es_var) # precision = 1 / standard error of effect size (Equation 20; Nakagawa & Santos 2012)
+
+s2m.0 <- sum(dat$wi*(length(dat$wi)-1))/(sum(dat$wi)^2-sum(dat$wi^2)) # Equation 22
+
+I2.total <- ((multilvl_null$sigma2[1]+multilvl_null$sigma2[2]+multilvl_null$sigma2[3])/(multilvl_null$sigma2[1]+multilvl_null$sigma2[2]+multilvl_null$sigma2[3]+s2m.0)) * 100
+
+I2.total
+## and 95% CI for I2.total:
+I2.total - qchisq(.95, df=1)/2; I2.total + qchisq(.95, df=1)/2
+
+
+I2.paper <- ((multilvl_null$sigma2[1])/(multilvl_null$sigma2[1]+multilvl_null$sigma2[2]+multilvl_null$sigma2[3]+s2m.0)) * 100
+
+I2.paper
+## and 95% CI for I2.paper:
+I2.paper - qchisq(.95, df=1)/2; I2.paper + qchisq(.95, df=1)/2
+
+I2.spp <- ((multilvl_null$sigma2[2])/(multilvl_null$sigma2[1]+multilvl_null$sigma2[2]+multilvl_null$sigma2[3]+s2m.0)) * 100
+
+I2.spp
+## and 95% CI for I2.spp:
+I2.spp - qchisq(.95, df=1)/2; I2.spp + qchisq(.95, df=1)/2
+
+I2.phylo <- ((multilvl_null$sigma2[3])/(multilvl_null$sigma2[1]+multilvl_null$sigma2[2]+multilvl_null$sigma2[3]+s2m.0)) * 100
+
+I2.phylo
+
+## and 95% CI for I2.phylo:
+I2.phylo - qchisq(.95, df=1)/2; I2.phylo + qchisq(.95, df=1)/2
+```
+
+And the egger regression:
+```{r multilvl_null_egger, cache=TRUE}
+egger_null <- lm(residuals.rma(multilvl_null)~dat$es_var)
+summary(egger_null)
+```
+**The result of the Egger regression shows that there is little evidence of publication bias.** This can be inferred by the (intercept) term that is not significantly different from zero.
+
+
+The next model investigates whether the level of sperm competition influences the investment into sperm competition
+```{r multilvl_scr, cache=TRUE}
+multilvl_scr <- rma.mv(yi = es_hedges_g, V = es_var, mod = ~  factor(sperm.comp.rank), random = list(~1 | paper.number, ~1 | animal_on_tree, ~1 | phylo), R = list(phylo = cor), method = "REML", data = dat)
+summary(multilvl_scr)
+```
+
+**The model including only the sperm competition rank has a lower AIC than the null model. Yet, there is no statistical evidence that the effect size is modulated by different levels of sperm competition, as measured by the rank.**
+
+The next model investigates whether the type of investment made by the males influences the investment into sperm competition. Just for comparison, I am running a model with and without phylogeny in the chunk below.
+
+```{r multilvl_vartype, cache=TRUE, dependson = c(2,3,6)}
+multilvl_vartype <- rma.mv(yi = es_hedges_g, V = es_var, mod = ~  variable.type1 - 1, random = list(~1 | paper.number, ~1 | animal_on_tree, ~1 | phylo), R = list(phylo = cor), method = "REML", data = dat)
+summary(multilvl_vartype)
+
+multilvl_vartype_no_phylo <- rma.mv(yi = es_hedges_g, V = es_var, mod = ~  variable.type1 - 1, random = list(~1 | paper.number, ~1 | animal_on_tree), method = "REML", data = dat)
+summary(multilvl_vartype_no_phylo)
+```
+**This model shows that on average, major males invest significantly more than minors in sperm allocation strategies. On the other hand, minor males invest significantly more in sperm production.** But it is important to note that the significant difference in production between minors and majors comes from minors investing significantly more in GSI than majors. When it comes to the other prodution variables, minors and majors invest similarly. The model without phylogeny is ~ 2 AIC from the model with phylogeny. So, perhaps, we could remove the phylo from this  model for the main text of your dissertation.
+
+Let's calculate the heterogeneity and egger regression:
+
+```{r multilvl_vartype_no_phylo}
+
+I2.total <- ((multilvl_vartype_no_phylo$sigma2[1]+multilvl_vartype_no_phylo$sigma2[2])/(multilvl_vartype_no_phylo$sigma2[1]+multilvl_vartype_no_phylo$sigma2[2]+s2m.0)) * 100
+
+I2.total
+## and 95% CI for I2.total:
+I2.total - qchisq(.95, df=1)/2; I2.total + qchisq(.95, df=1)/2
+
+
+I2.paper <- ((multilvl_vartype_no_phylo$sigma2[1])/(multilvl_vartype_no_phylo$sigma2[1]+multilvl_vartype_no_phylo$sigma2[2]+s2m.0)) * 100
+
+I2.paper
+## and 95% CI for I2.paper:
+I2.paper - qchisq(.95, df=1)/2; I2.paper + qchisq(.95, df=1)/2
+
+I2.spp <- ((multilvl_vartype_no_phylo$sigma2[2])/(multilvl_vartype_no_phylo$sigma2[1]+multilvl_vartype_no_phylo$sigma2[2]+s2m.0)) * 100
+
+I2.spp
+## and 95% CI for I2.spp:
+I2.spp - qchisq(.95, df=1)/2; I2.spp + qchisq(.95, df=1)/2
+
+egger_vartype_no_phylo <- lm(residuals.rma(multilvl_vartype_no_phylo)~dat$es_var)
+summary(egger_vartype_no_phylo)
+
+
+```
+
+
+
+Plotting the results of model **multilvl_vartype**
+```{r dat_es_vartype, cache=TRUE}
+require(tidyverse)
+
+# Including the output of the model w/ estimates of effect per variable type in a data.frame.
+dat_es_vartype <- as.data.frame(multilvl_vartype_no_phylo[c("beta","ci.lb","ci.ub")])
+dat_es_vartype$vartype <- c("Allocation", "Production \n (Quantity)", "Production \n (GSI)", "Quality")
+
+
+dat_es_vartype %>%
+  ggplot(aes(x=vartype))+
+  geom_hline(aes(yintercept = 0),linetype = "dashed", lwd = 0.5)+
+  geom_linerange(aes(ymin = ci.lb, ymax = ci.ub), lwd = 0.5, alpha = 0.7)+
+  geom_point(aes(y=beta), shape = 21, col = "black", size = 3) +
+  scale_fill_manual(values = c("grey"))+
+  ylab(expression(paste("Hedge's ", italic("g"))))+
+  xlab("")+
+  theme_bw()+
+  coord_flip()+
+  guides(fill= guide_legend(override.aes = list(size=5)),
+         size = guide_legend(override.aes = list(fill = "gray40")))+
+  theme(panel.border = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          axis.line = element_line(colour = "black"),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14, face="bold"))
+
+ggsave(filename="plot_multilvl_vartype.svg", device="svg")
+ggsave(filename="plot_multilvl_vartype.pdf", device="pdf")
+ggsave(filename="plot_multilvl_vartype.jpg", device="jpg")
+
+```
+
+## Model with additive effect of predictors
+
+
+The following model estimates the mean meta-analytic effect by type of investment variable and level of sperm competition and its interaction term. In this model, sperm competition is fit as the original rank with 5 different levels. 
+
+**Uses only a subset of data with Observational studies and excludes allocation, which is primarily an experimental study variable.**
+```{r multilvl_inter2, cache=TRUE}
+dat_obs <- subset(dat, type.of.study == "obs")
+dat_obs <- droplevels(dat_obs)
+
+dat_obs <- subset(dat_obs, variable.type != "allocation")
+dat_obs <- droplevels(dat_obs)
+
+phy_ma_obs <- drop.tip(phy, which(!phy$tip.label %in% dat_obs$animal_on_tree)) # Prunning tree to the species that are in the effect size data.frame:
+
+cor_obs <- vcv(phy_ma_obs, corr = T)
+
+multilvl_inter2 <- rma.mv(yi = es_hedges_g, V = es_var, mod = ~ factor(sperm.comp.rank) %in% (variable.type1 - 1), random = list(~1 | paper.number, ~1 | animal_on_tree, ~1 | phylo), R = list(phylo = cor_obs), method = "REML", data = dat_obs)
+summary(multilvl_inter2)
+```
+**The effect of phylogeny is 0, so I will remove it from the model:**
+```{r multilvl_inter3}
+multilvl_inter3 <- rma.mv(yi = es_hedges_g, V = es_var, mod = ~ factor(sperm.comp.rank) %in% (variable.type1 - 1), random = list(~1 | paper.number, ~1 | animal_on_tree), method = "REML", data = dat_obs)
+summary(multilvl_inter3)
+```
+
+And the egger regression:
+```{r multilvl_inter3_egger, cache=TRUE}
+egger_inter3 <- lm(residuals.rma(multilvl_inter3)~dat_obs$es_var)
+summary(egger_inter3)
+```
+
+Calculating heterogeneity: 
+```{r multilvl_null_heterogeneity}
+dat$wi <- 1/sqrt(dat$es_var) # precision = 1 / standard error of effect size (Equation 20; Nakagawa & Santos 2012)
+
+s2m.0 <- sum(dat$wi*(length(dat$wi)-1))/(sum(dat$wi)^2-sum(dat$wi^2)) # Equation 22
+
+I2.total <- ((multilvl_inter3$sigma2[1]+multilvl_inter3$sigma2[2])/(multilvl_inter3$sigma2[1]+multilvl_inter3$sigma2[2]+s2m.0)) * 100
+
+I2.total
+## and 95% CI for I2.total:
+I2.total - qchisq(.95, df=1)/2; I2.total + qchisq(.95, df=1)/2
+
+
+I2.paper <- ((multilvl_inter3$sigma2[1])/(multilvl_inter3$sigma2[1]+multilvl_inter3$sigma2[2]+s2m.0)) * 100
+
+I2.paper
+## and 95% CI for I2.paper:
+I2.paper - qchisq(.95, df=1)/2; I2.paper + qchisq(.95, df=1)/2
+
+I2.spp <- ((multilvl_inter3$sigma2[2])/(multilvl_inter3$sigma2[1]+multilvl_inter3$sigma2[2]+s2m.0)) * 100
+
+I2.spp
+## and 95% CI for I2.spp:
+I2.spp - qchisq(.95, df=1)/2; I2.spp + qchisq(.95, df=1)/2
+
+```
+
+
+Plotting the results of model **multilvl_inter2**
+
+```{r dat_es_inter2, cache=TRUE}
+require(tidyverse)
+
+# Including the output of the model w/ estimates of effect per variable type in a data.frame.
+dat_es_inter2 <- as.data.frame(multilvl_inter3[c("beta","ci.lb","ci.ub")])
+dat_es_inter2$vartype <- c(rep("Production \n (Quantity)",5), rep("Production (GSI)",5), rep("Quality",4))
+dat_es_inter2$scr <- c("1","2","3","4","5","1","2","3","4","5","1","2","3","4")
+dat_es_inter2$group <- c(1,2,3,4,5,1,2,3,4,5,1,2,3,4)
+
+
+dat_es_inter2 %>%
+  ggplot(aes(x=vartype, group = group))+
+  geom_hline(aes(yintercept = 0),linetype = "dashed", lwd = 0.5)+
+  geom_point(aes(y=beta, fill = scr), shape = 21, col = "black", size = 3, position = position_dodge(width = 0.9))+
+  geom_linerange(aes(ymin = ci.lb, ymax = ci.ub), lwd = 0.5, alpha = 0.7, position = position_dodge(width = 0.9))+
+  scale_fill_brewer()+
+  ylab(expression(paste("Hedge's ", italic("g"))))+
+  xlab("Variable Type")+
+  theme_bw()+
+  guides(fill= guide_legend(title="Sperm Competition Rank", override.aes = list(size=5)),
+         size = guide_legend(override.aes = list(fill = "gray40")))+
+  theme(panel.border = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          axis.line = element_line(colour = "black"),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14),
+        legend.position = "bottom")
+
+ggsave(filename="plot_multilvl_inter3.svg", device="svg")
+ggsave(filename="plot_multilvl_inter3.pdf", device="pdf")
+ggsave(filename="plot_multilvl_inter3.jpg", device="jpg")
+
+```
+
+
+## References

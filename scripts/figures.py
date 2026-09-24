@@ -3,7 +3,9 @@
 figures.py
 ----------
 Generates publication-quality figures for the sperm competition meta-analysis
-manuscript. All estimates and bounds are taken from build/results.json.
+manuscript. All estimates and bounds are taken from build/results.json and
+build/model_results.json; the funnel plot uses build/effect_sizes.csv (all
+three produced by analysis/01_baseline_models.R and scripts/build_results.py).
 
 Output:
   figures/fig1_prisma_flow.png       -- PRISMA 2020 flow diagram
@@ -20,6 +22,7 @@ from __future__ import annotations
 import json
 import os
 import numpy as np
+import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -47,8 +50,13 @@ def load_results():
     with open(os.path.join(BUILD_DIR, "results.json"), "r", encoding="utf-8") as f:
         return json.load(f)
 
-def make_fig1_prisma():
+def load_models():
+    with open(os.path.join(BUILD_DIR, "model_results.json"), "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def make_fig1_prisma(R):
     """PRISMA 2020 Flow Diagram with clean layout and zero text overlap."""
+    S, C = R["summary"], R["crosscheck"]
     fig, ax = plt.subplots(figsize=(9.0, 9.5), dpi=300)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -98,7 +106,10 @@ def make_fig1_prisma():
 
     # 4. Included
     draw_box(0.08, 0.04, 0.84, 0.19, "Included in Quantitative Synthesis (Baseline)",
-             "Studies included in synthesis: 50 studies (29 fish species)\nTotal effect sizes: 183 Hedges' g\n• Production: 65 (31 GSI + 34 Quantity)   • Quality: 107 (velocity, motility, morphology)   • Allocation: 11\n(24 absolute gonad mass rows excluded in original as non-independent of GSI)",
+             f"Studies included: {C['n_delmatto_studies']} ({S['n_studies']} contributing to analysed effect sizes; {S['n_species']} fish species)\n"
+             f"Total effect sizes: {S['n_effects']} Hedges' g\n"
+             f"• Production: {S['n_production']} ({S['n_gsi']} GSI + {S['n_quantity']} Quantity)   • Quality: {S['n_quality']} (velocity, motility, morphology)   • Allocation: {S['n_allocation']}\n"
+             f"({S['n_gonad_mass_excluded']} absolute gonad mass rows excluded in original as non-independent of GSI)",
              bg="#f0f9f4", border=GREEN, title_col=GREEN)
 
     # Connecting arrows
@@ -121,13 +132,15 @@ def make_fig1_prisma():
 
 def make_fig2_orchard(R):
     """Orchard / forest plot of trait categories."""
-    cats = [
-        ("Overall (Null Model)", R["overall_null"]["estimate"], -0.519, -1.317, 0.278, R["summary"]["n_effects"], "#333333"),
-        ("Quality", R["by_category"]["quality"]["estimate"], -0.251, -0.699, 0.197, R["by_category"]["quality"]["k"], "#555555"),
-        ("Production (Quantity)", R["by_category"]["quantity"]["estimate"], -0.384, -0.845, 0.076, R["by_category"]["quantity"]["k"], "#555555"),
-        ("Production (GSI)", R["by_category"]["gsi"]["estimate"], -2.638, -3.105, -2.177, R["by_category"]["gsi"]["k"], GREEN),
-        ("Allocation", R["by_category"]["allocation"]["estimate"], 2.732, 1.476, 3.989, R["by_category"]["allocation"]["k"], RED),
-    ]
+    M = load_models()
+    null = M["null"]["coef"]
+    C = R["by_category"]
+    cats = [("Overall (Null Model)", R["overall_null"]["estimate"], null["est"], null["ci_low"],
+             null["ci_high"], R["summary"]["n_effects"], "#333333")]
+    for slug, label, col in [("quality", "Quality", "#555555"), ("quantity", "Production (Quantity)", "#555555"),
+                             ("gsi", "Production (GSI)", GREEN), ("allocation", "Allocation", RED)]:
+        c = C[slug]
+        cats.append((label, c["estimate"], c["est"], c["ci_low"], c["ci_high"], c["k"], col))
 
     fig, ax = plt.subplots(figsize=(8.5, 4.8), dpi=300)
 
@@ -171,9 +184,11 @@ def make_fig3_heterogeneity(R):
     fig, ax = plt.subplots(figsize=(8.0, 4.0), dpi=300)
 
     models = ["Null Model", "Model 1 (Variable Type)", "Model 2 (Type × SCR)"]
-    study = [55.46, 76.02, 46.24]
-    species = [9.35, 7.50, 36.33]
-    phylo = [18.38, 0.0, 0.0]
+    M = load_models()
+    i2s = [M[key]["i2"]["corrected"] for key in ("null", "model1", "model2")]
+    study = [d["study"] for d in i2s]
+    species = [d["species"] for d in i2s]
+    phylo = [d.get("phylo", 0.0) for d in i2s]
     residual = [100 - (s + sp + ph) for s, sp, ph in zip(study, species, phylo)]
 
     y_pos = np.arange(len(models))
@@ -207,39 +222,36 @@ def make_fig3_heterogeneity(R):
     plt.close()
     print(f"Generated {out_path}")
 
-def make_fig4_funnel():
-    """Simulated residual funnel plot demonstrating small-study effect diagnostics."""
-    np.random.seed(42)
-    n = 183
-    se = np.random.uniform(0.1, 1.2, n)
-    # Simulated effect sizes around null mean -0.519 with some outliers
-    g = -0.519 + np.random.normal(0, se)
-    # add 8 extreme points
-    extreme_idx = np.random.choice(n, 8, replace=False)
-    g[extreme_idx[:4]] += np.random.uniform(8, 20, 4)
-    g[extreme_idx[4:]] -= np.random.uniform(8, 20, 4)
+def make_fig4_funnel(R):
+    """Funnel plot of observed effect sizes against their standard errors."""
+    es = pd.read_csv(os.path.join(BUILD_DIR, "effect_sizes.csv"))
+    g = es["yi"].to_numpy()
+    se = np.sqrt(es["vi"].to_numpy())
+    null_est = load_models()["null"]["coef"]["est"]
+    x_lim = 15
+    extreme = np.abs(g) > 8
 
     fig, ax = plt.subplots(figsize=(8.0, 5.0), dpi=300)
 
     # Funnel boundaries (95% pseudo-confidence regions around 0)
-    se_line = np.linspace(0.01, 1.5, 100)
+    se_max = float(np.ceil(se.max() * 10) / 10)
+    se_line = np.linspace(0.0, se_max, 100)
     ax.plot(-1.96 * se_line, se_line, "k--", lw=0.8, alpha=0.7)
     ax.plot(1.96 * se_line, se_line, "k--", lw=0.8, alpha=0.7)
     ax.axvline(0, color="#888888", linestyle=":", lw=0.8)
-    ax.axvline(-0.519, color=NAVY, linestyle="-", lw=1.2, label="Pooled Mean (g = −0.519)")
+    ax.axvline(null_est, color=NAVY, linestyle="-", lw=1.2,
+               label=f"Pooled Mean (g = {R['overall_null']['estimate']})")
 
-    # Plot regular points
-    mask_normal = np.abs(g) <= 6
-    ax.scatter(g[mask_normal], se[mask_normal], color=NAVY, alpha=0.6, s=35, edgecolor="none", label="Reported Effect Sizes")
-    # Plot extreme points
-    ax.scatter(g[~mask_normal], se[~mask_normal], color=RED, alpha=0.9, s=50, marker="^",
-               label="Extreme Outliers (|g| > 6; n = 8)")
+    ax.scatter(g[~extreme], se[~extreme], color=NAVY, alpha=0.6, s=35, edgecolor="none",
+               label="Reported Effect Sizes")
+    # Extreme values are drawn at the plot edge so the bulk of the data stays legible
+    ax.scatter(np.clip(g[extreme], -x_lim + 0.4, x_lim - 0.4), se[extreme], color=RED, alpha=0.9,
+               s=50, marker="^", label=f"Extreme Effects (|g| > 8; n = {extreme.sum()}; shown at edge)")
 
-    ax.invert_yaxis()
     ax.set_xlabel("Hedges' g", fontsize=10, weight="bold")
     ax.set_ylabel("Standard Error (SE)", fontsize=10, weight="bold")
-    ax.set_xlim(-15, 15)
-    ax.set_ylim(1.4, 0.0)
+    ax.set_xlim(-x_lim, x_lim)
+    ax.set_ylim(se_max, 0.0)
 
     ax.legend(loc="lower left", frameon=True, fontsize=8.5, edgecolor=BORDER_GREY)
     ax.spines["top"].set_visible(False)
@@ -254,10 +266,10 @@ def make_fig4_funnel():
 def main():
     os.makedirs(FIG_DIR, exist_ok=True)
     R = load_results()
-    make_fig1_prisma()
+    make_fig1_prisma(R)
     make_fig2_orchard(R)
     make_fig3_heterogeneity(R)
-    make_fig4_funnel()
+    make_fig4_funnel(R)
 
 if __name__ == "__main__":
     main()

@@ -305,7 +305,7 @@ Dougherty et al. (2022) benchmark (Q0b), and the present updated synthesis (Q1).
 | **Testes & GSI Allometry** | GSI only ($k = 31, g = -2.638$); 24 absolute mass rows excluded | Focused on absolute testis mass to avoid ratio scaling artifacts | Bivariate meta-regression modeling body mass & dimorphism as continuous allometric covariates |
 | **Sperm Competition Proxy** | 5-level categorical SCR (Stockley 1997); extreme ranks 1 & 5 confounded | Sneaker frequency (linear test); evaluated cross-taxa gradient | Continuous quadratic polynomial testing Parker's intermediate peak + continuous frequency |
 | **Phylogeny** | Vector art tree without branch lengths; dropped from final models | Open Tree of Life synthetic tree (`rotl`) | Calibrated Ray-finned fish tree (Rabosky / `fishtree`) with Grafen branch lengths |
-| **Variance & Provenance** | Single total $N$ per row; sampling variances not archived | Re-extracted per-morph statistics for included subset | Complete re-extraction with exact variances via `metafor::escalc`; fully open data |
+| **Variance & Provenance** | Exact $g$ and sampling variances archived in the 2018 analysis repository; per-morph trait means not archived | Re-extracted per-morph statistics for included subset | Complete re-extraction with exact variances via `metafor::escalc`; fully open data |
 | **Overall Goal** | Original MSc dissertation (unpublished) | Landmark broad-taxa animal benchmark (*Biol Rev*) | Definitive, reproducible publication resolving allometry & non-linear risk |
 
 ## 2.2. Interpretive scope and a priori caveats
@@ -353,8 +353,7 @@ findings will be read:
   and taxonomic concentration (in the original, 30% of rows are salmonids and 46% come from five species)
   are strong. Quantitative bias diagnostics (§3.10) do not address either, and we flag them as limitations.
 - **A reproduction that fails is a result.** If the published estimates cannot be recovered from
-  Supplementary Table 1 — a live possibility given the absent variances, even though the row set itself
-  reconciles exactly — we will
+  Supplementary Table 1 — a possibility now largely excluded, since the archived 2018 analysis files reproduce the published estimates — we will
   report the reproduction outcome transparently rather than silently adopting the updated numbers as the
   baseline.
 
@@ -407,32 +406,21 @@ The Del Matto reproduction proceeds in six named steps:
    This step has been implemented programmatically (`scripts/reconcile_dissertation_data.py`), confirmed to
    yield 100% exact numerical recovery, and exported to `data/output/delmatto2018_reconciled.csv` with full
    auditing tags.
-3. **Rebuild the derived fields the table does not contain**: the Production/Quantity vs. Production/GSI
-   sub-category (re-derived from the free-text response-variable strings, with the classification rules
-   published), and the observational vs. experimental/laboratory flag used to subset model 2 (recoverable
-   only by returning to the 50 source articles). Both reconstructions will be documented as assumptions of
-   the reproduction, since neither is recoverable from the archive.
-4. **Reconstruct sampling variances.** Supplementary Table 1 reports *g* and a single *N* per row with no
-   per-morph sample sizes, so the variance of Hedges' *g* cannot be computed exactly. For Q0a we approximate it
-   under the stated assumption of equal morph sample sizes,
-   *v* = (*n*₁+*n*₂)/(*n*₁*n*₂) + *g*²/(2(*n*₁+*n*₂)) with *n*₁ = *n*₂ = *N*/2
-   [@hedgesDistributionTheoryGlass1981; @borensteinIntroductionMetaanalysis2009], and report the sensitivity of
-   the reproduced estimates to departures from that assumption (e.g. 1:2 and 2:1 morph ratios).
-5. **Rebuild the phylogeny.** Supplementary Figure 1 gives a 29-tip topology as an image with no stated
-   source and no branch lengths. For Q0a we construct the closest defensible equivalent (see *Data synthesis*)
-   and note that the phylogenetic random effect in the reproduction is therefore approximate.
+3. **Recover the derived fields.** The Production/Quantity vs. Production/GSI sub-category, the observational vs. experimental flag used to subset model 2, study identifiers and study setting are not in Supplementary Table 1 but are recorded in the original extraction spreadsheet, recovered from the original 2018 analysis repository (`data/input/delmatto2018_original/`, `analysis/original_2018/`). Its 207 rows match Supplementary Table 1 row for row (*g*, *N* and SCR identical), and its absolute-gonad-mass flag reproduces the 207 → 183 exclusion exactly.
+4. **Recover sampling variances.** The same spreadsheet archives the exact sampling variance of every *g*, so the reproduction uses these rather than an equal-morph-*N* approximation. Per-morph trait means and SDs were not archived, so the per-morph re-extraction for Q1 remains necessary.
+5. **Recover the phylogeny.** The original tree is the Betancur-R et al. (2017) bony-fish phylogeny with Grafen branch lengths; 12 of its 28 tips are congener placeholders added at the genus root, and several species are represented by proxy relatives. The Q0 reproduction uses this tree as archived; the Q1 phylogeny is rebuilt as described under Data synthesis.
 6. **Re-fit and compare.** Re-implement the three models in R with `metafor::rma.mv`
    [@viechtbauerConductingMetaanalysesMetafor2010]: the null model (study + species + phylogeny); model 1
    (variable type, four levels, parameterized to return a mean per level; study + species); and model 2
    (variable type × SCR on the observational, non-allocation subset; study + species). We verify recovery of
    the published estimates: the overall mean −0.519 (−1.317, 0.278); allocation +2.732 (1.476,
    3.989), GSI −2.638 (−3.105, −2.177), quantity −0.384 (−0.845, 0.076), quality −0.251
-   (−0.699, 0.197); the *I*² decompositions; and Egger intercepts.
+   (−0.699, 0.197); the *I*² decompositions; and Egger intercepts. This reproduction is implemented in `analysis/01_baseline_models.R`: the null-model and all four category means are recovered to within 0.01, and the published *I*² decomposition is recovered when the original script's typical-sampling-variance weights (*w*ᵢ = 1/√*v*ᵢ) are used. With the weights of Nakagawa & Santos (2012, Eq. 22; *w*ᵢ = 1/*v*ᵢ), total *I*² for the null model rises from 83% to 93%. The original Egger test regressed model residuals on *v*ᵢ and read the intercept; a multilevel Egger regression with √*v*ᵢ as moderator instead shows a significant positive slope in all three models, indicating marked small-study effects.
 
 **Data audit as part of Q0a.** Eight rows in Supplementary Table 1 carry |*g*| > 8 (maximum |*g*| = 78.624,
 seminal vesicle mass in *Sufflogobius bibarbatus* [@seivagReproductiveTacticsMale2016]; 54.723, sperm density
 in *Lepomis macrochirus* [@burnessMotilityATPLevels2005]; −48.947 and −23.531, relative sperm volume and
-number in *Salmo salar* [@gageEffectsAlternativeMale1995]), and 22 rows carry |*g*| > 3. All eight will be
+number in *Salmo salar* [@gageEffectsAlternativeMale1995]), (seven of the eight fall within the 183 analysed rows), and 22 rows carry |*g*| > 3. All eight will be
 re-extracted from source as a priority, each discrepancy classified by cause, and the reproduction reported
 both with and without them.
 
@@ -860,9 +848,7 @@ with four levels, parameterized to return one mean per level, study + species), 
 SCR on the observational, non-allocation subset, study + species) — using `metafor::rma.mv`
 [@viechtbauerConductingMetaanalysesMetafor2010], the modified multilevel *I*²
 [@nakagawaSantosMethodologicalIssuesAdvances2012], and Egger's regression
-[@eggerBiasMetaanalysisDetected1997]. Because the archived table contains no variances, the reproduction is
-run under the equal-morph-*N* assumption and repeated under 1:2 and 2:1 morph ratios; because it contains no
-sub-category or setting flags, it is run under the reconstructed classifications documented in steps 3 and 4.
+[@eggerBiasMetaanalysisDetected1997]. The reproduction uses the exact sampling variances, classifications and phylogeny recovered from the original 2018 analysis files (steps 3–5).
 Every departure from the original specification forced by the archive's contents is listed in a
 reproduction-limitations table.
 
@@ -996,8 +982,7 @@ The original assessed bias only with the intercept of an Egger's regression on e
 [@eggerBiasMetaanalysisDetected1997], reporting no funnel plots, no time-lag analysis and no outlier
 analysis. Applying current practice [@nakagawaMethodsTestingPublication2022] to the whole updated dataset, we
 will assess bias by: (1) a multilevel Egger's regression — a two-step approach following the parallel
-`mate_choice_meta` update: we first include the SE (√variance) of effect sizes as a moderator (intercept ≠ 0
-at *P* ≤ 0.05 flags small-study effects) and, if the slope is significant, re-fit with the sampling
+`mate_choice_meta` update: we first include the SE (√variance) of effect sizes as a moderator (a slope ≠ 0 at *P* ≤ 0.05 flags small-study effects) and, if the slope is significant, re-fit with the sampling
 variance as the moderator to read off a less-biased adjusted mean; (2) a funnel plot of model residuals
 against precision; (3) a time-lag bias check including publication year (and an original-vs-new evidence
 indicator) as moderators, which is of particular interest here because the original's evidence base spans

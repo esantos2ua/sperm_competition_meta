@@ -1,8 +1,8 @@
 {
   "summary": {
-    "n_studies": 50,
-    "w_studies": "fifty",
-    "W_studies": "Fifty",
+    "n_studies": 48,
+    "w_studies": "forty-eight",
+    "W_studies": "Forty-eight",
     "n_species": 29,
     "w_species": "twenty-nine",
     "W_species": "Twenty-nine",
@@ -18,24 +18,21 @@
     "pct_production": "35.5%",
     "pct_quality": "58.5%",
     "pct_allocation": "6.0%",
-    "n_extreme_effects": 8,
+    "n_extreme_effects": 7,
     "max_extreme_g": "78.6"
   },
   "overall_null": {
-    "estimate": "−0.519",
-    "ci": "−1.317 to +0.278",
-    "estimate_ci": "−0.519 (95% CI −1.317 to +0.278)",
-    "ci_lower": "−1.317",
-    "ci_upper": "+0.278",
-    "i2_total": "83.21%",
-    "i2_total_ci": "81.60% to 85.44%",
-    "i2_study": "55.46%",
-    "i2_study_ci": "53.54% to 57.38%",
-    "i2_species": "9.35%",
-    "i2_species_ci": "7.43% to 11.28%",
-    "i2_phylogeny": "18.38%",
-    "i2_phylogeny_ci": "16.46% to 20.30%",
-    "p_val": "0.201"
+    "estimate": "−0.522",
+    "ci": "−1.325 to +0.280",
+    "estimate_ci": "−0.522 (95% CI −1.325 to +0.280)",
+    "ci_lower": "−1.325",
+    "ci_upper": "+0.280",
+    "i2_total": "93.39%",
+    "i2_study": "62.02%",
+    "i2_species": "10.37%",
+    "i2_phylogeny": "21.00%",
+    "p_val": "0.202",
+    "i2_total_original_2018": "83.24%"
   },
   "by_category": {
     "allocation": {
@@ -44,16 +41,17 @@
       "slug": "allocation",
       "k": 11,
       "pct_k": "6.0%",
-      "est": 2.732,
-      "ci_low": 1.476,
-      "ci_high": 3.989,
+      "est": 2.73290147518175,
+      "ci_low": 1.47594949738363,
+      "ci_high": 3.98985345297987,
+      "p": 2.03140627870307e-05,
       "interpretation": "Majors allocate significantly more sperm",
       "favours": "Majors",
       "sig": true,
-      "estimate": "+2.732",
-      "ci": "+1.476 to +3.989",
-      "estimate_ci": "+2.732 (95% CI +1.476 to +3.989)",
-      "estimate_ci_tbl": "+2.732 [+1.476, +3.989]"
+      "estimate": "+2.733",
+      "ci": "+1.476 to +3.990",
+      "estimate_ci": "+2.733 (95% CI +1.476 to +3.990)",
+      "estimate_ci_tbl": "+2.733 [+1.476, +3.990]"
     },
     "gsi": {
       "name": "Production / GSI",
@@ -61,16 +59,17 @@
       "slug": "gsi",
       "k": 31,
       "pct_k": "16.9%",
-      "est": -2.638,
-      "ci_low": -3.105,
-      "ci_high": -2.177,
+      "est": -2.63837005610111,
+      "ci_low": -3.10508187660433,
+      "ci_high": -2.17165823559788,
+      "p": 1.57085501402155e-28,
       "interpretation": "Minors invest substantially more in relative gonad size",
       "favours": "Minors",
       "sig": true,
       "estimate": "−2.638",
-      "ci": "−3.105 to −2.177",
-      "estimate_ci": "−2.638 (95% CI −3.105 to −2.177)",
-      "estimate_ci_tbl": "−2.638 [−3.105, −2.177]"
+      "ci": "−3.105 to −2.172",
+      "estimate_ci": "−2.638 (95% CI −3.105 to −2.172)",
+      "estimate_ci_tbl": "−2.638 [−3.105, −2.172]"
     },
     "quantity": {
       "name": "Production / Quantity",
@@ -78,16 +77,17 @@
       "slug": "quantity",
       "k": 34,
       "pct_k": "18.6%",
-      "est": -0.384,
-      "ci_low": -0.845,
-      "ci_high": 0.076,
-      "interpretation": "Trend towards higher sperm count in minors (CI spans zero)",
+      "est": -0.384531995181451,
+      "ci_low": -0.845412916109682,
+      "ci_high": 0.0763489257467794,
+      "p": 0.101990587416442,
+      "interpretation": "Trend towards minors (CI spans zero)",
       "favours": "Indeterminate",
       "sig": false,
-      "estimate": "−0.384",
+      "estimate": "−0.385",
       "ci": "−0.845 to +0.076",
-      "estimate_ci": "−0.384 (95% CI −0.845 to +0.076)",
-      "estimate_ci_tbl": "−0.384 [−0.845, +0.076]"
+      "estimate_ci": "−0.385 (95% CI −0.845 to +0.076)",
+      "estimate_ci_tbl": "−0.385 [−0.845, +0.076]"
     },
     "quality": {
       "name": "Quality",
@@ -95,10 +95,11 @@
       "slug": "quality",
       "k": 107,
       "pct_k": "58.5%",
-      "est": -0.251,
-      "ci_low": -0.699,
-      "ci_high": 0.197,
-      "interpretation": "Trend towards faster/better sperm in minors (CI spans zero)",
+      "est": -0.251043398146053,
+      "ci_low": -0.699327401029625,
+      "ci_high": 0.197240604737518,
+      "p": 0.27237968269103,
+      "interpretation": "Trend towards minors (CI spans zero)",
       "favours": "Indeterminate",
       "sig": false,
       "estimate": "−0.251",
@@ -108,21 +109,35 @@
     }
   },
   "model1_heterogeneity": {
-    "i2_total": "83.52%",
-    "i2_study": "76.02%",
-    "i2_species": "7.50%"
+    "i2_total": "93.52%",
+    "i2_study": "85.12%",
+    "i2_species": "8.40%"
   },
   "moderator_scr": {
-    "i2_total": "82.57%",
-    "i2_study": "46.24%",
-    "i2_species": "36.33%",
-    "conclusion": "No significant moderation by sperm competition rank across trait categories"
+    "i2_total": "93.16%",
+    "i2_study": "52.17%",
+    "i2_species": "40.99%",
+    "k": 163,
+    "lrt_chi2": "67.69",
+    "lrt_df": 11,
+    "lrt_p": "< 0.001"
   },
   "publication_bias": {
-    "egger_null": "−0.323",
-    "egger_m1": "−0.338",
-    "egger_m2": "−0.610",
-    "all_p": "> 0.05"
+    "null": {
+      "slope": "+1.633",
+      "z": "4.29",
+      "p": "< 0.001"
+    },
+    "model1": {
+      "slope": "+1.426",
+      "z": "3.70",
+      "p": "< 0.001"
+    },
+    "model2": {
+      "slope": "+0.862",
+      "z": "2.16",
+      "p": "= 0.031"
+    }
   },
   "crosscheck": {
     "n_delmatto_studies": 50,
@@ -138,9 +153,9 @@
       "slug": "allocation",
       "k": 11,
       "pct_k": "6.0%",
-      "estimate": "+2.732",
-      "ci": "+1.476 to +3.989",
-      "estimate_ci": "+2.732 [+1.476, +3.989]",
+      "estimate": "+2.733",
+      "ci": "+1.476 to +3.990",
+      "estimate_ci": "+2.733 [+1.476, +3.990]",
       "interpretation": "Majors allocate significantly more sperm",
       "favours": "Majors",
       "bold": true
@@ -151,8 +166,8 @@
       "k": 31,
       "pct_k": "16.9%",
       "estimate": "−2.638",
-      "ci": "−3.105 to −2.177",
-      "estimate_ci": "−2.638 [−3.105, −2.177]",
+      "ci": "−3.105 to −2.172",
+      "estimate_ci": "−2.638 [−3.105, −2.172]",
       "interpretation": "Minors invest substantially more in relative gonad size",
       "favours": "Minors",
       "bold": true
@@ -162,10 +177,10 @@
       "slug": "quantity",
       "k": 34,
       "pct_k": "18.6%",
-      "estimate": "−0.384",
+      "estimate": "−0.385",
       "ci": "−0.845 to +0.076",
-      "estimate_ci": "−0.384 [−0.845, +0.076]",
-      "interpretation": "Trend towards higher sperm count in minors (CI spans zero)",
+      "estimate_ci": "−0.385 [−0.845, +0.076]",
+      "interpretation": "Trend towards minors (CI spans zero)",
       "favours": "Indeterminate",
       "bold": false
     },
@@ -177,7 +192,7 @@
       "estimate": "−0.251",
       "ci": "−0.699 to +0.197",
       "estimate_ci": "−0.251 [−0.699, +0.197]",
-      "interpretation": "Trend towards faster/better sperm in minors (CI spans zero)",
+      "interpretation": "Trend towards minors (CI spans zero)",
       "favours": "Indeterminate",
       "bold": false
     }
@@ -187,34 +202,34 @@
       "model": "Null Model (Intercept-only)",
       "moderators": "None (intercept only)",
       "random_effects": "Study + Species + Phylogeny",
-      "i2_total": "83.21%",
-      "i2_study": "55.46%",
-      "i2_species": "9.35%",
-      "i2_phylo": "18.38%"
+      "i2_total": "93.39%",
+      "i2_study": "62.02%",
+      "i2_species": "10.37%",
+      "i2_phylo": "21.00%"
     },
     {
       "model": "Model 1 (Variable Type)",
       "moderators": "Trait Category (4 levels)",
       "random_effects": "Study + Species",
-      "i2_total": "83.52%",
-      "i2_study": "76.02%",
-      "i2_species": "7.50%",
+      "i2_total": "93.52%",
+      "i2_study": "85.12%",
+      "i2_species": "8.40%",
       "i2_phylo": "— (dropped)"
     },
     {
       "model": "Model 2 (Variable Type × SCR)",
       "moderators": "Trait Category × SCR Interaction",
       "random_effects": "Study + Species",
-      "i2_total": "82.57%",
-      "i2_study": "46.24%",
-      "i2_species": "36.33%",
+      "i2_total": "93.16%",
+      "i2_study": "52.17%",
+      "i2_species": "40.99%",
       "i2_phylo": "— (dropped)"
     }
   ],
   "table3": [
     {
       "dimension": "Scope & Taxa",
-      "delmatto": "Fishes only (50 studies, 29 species, 183 effect sizes)",
+      "delmatto": "Fishes only (48 studies, 29 species, 183 effect sizes)",
       "dougherty": "All animals (92 studies, 67 species; 58 fish studies)",
       "our_update": "Reconciled fishes master set + post-2020 literature update + non-fish extension"
     },
@@ -226,7 +241,7 @@
     },
     {
       "dimension": "Behavioral Allocation",
-      "delmatto": "Formal category (k = 11, g = +2.732; majors allocate more per spawn)",
+      "delmatto": "Formal category (k = 11, g = +2.733; majors allocate more per spawn)",
       "dougherty": "Omitted / collapsed (focused only on stripped/stored sperm counts)",
       "our_update": "Core functional axis testing ejaculate economy during mating interactions"
     },
@@ -244,13 +259,13 @@
     },
     {
       "dimension": "Phylogeny",
-      "delmatto": "Vector art tree without branch lengths; dropped from final models",
+      "delmatto": "Betancur-R et al. (2017) tree, Grafen branch lengths; 12 tips as congener placeholders; dropped from final models",
       "dougherty": "Open Tree of Life synthetic tree (rotl)",
       "our_update": "Calibrated Ray-finned fish tree (Rabosky / fishtree) with Grafen branch lengths"
     },
     {
       "dimension": "Variance & Provenance",
-      "delmatto": "Single total N per row; sampling variances not archived",
+      "delmatto": "Exact g and sampling variances archived in the 2018 analysis repository; per-morph trait means not archived",
       "dougherty": "Re-extracted per-morph statistics for included subset",
       "our_update": "Complete re-extraction with exact variances via metafor::escalc; fully open data"
     }

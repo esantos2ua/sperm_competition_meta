@@ -171,7 +171,7 @@ We established a consistent directional convention across all traits:
 - *Positive $g$ ($g > 0$):* Greater trait values in *majors* (bourgeois / territorial males).
 - *Negative $g$ ($g < 0$):* Greater trait values in *minors* (sneakers / satellites).
 
-Sampling variances ($v_g$) were computed using standard formulations @borensteinIntroductionMetaanalysis2009. Where studies archived only combined sample sizes, variances were reconstructed under balanced allocation assumptions as documented in the protocol @delmattoSpermCompetitionGames2018.
+Sampling variances ($v_g$) were computed using standard formulations @borensteinIntroductionMetaanalysis2009. Exact effect sizes and sampling variances for the baseline dataset were recovered from the archived 2018 extraction spreadsheet and analysis code @delmattoSpermCompetitionGames2018, and all baseline models were refitted from these values.
 
 == Multilevel phylogenetic meta-analysis
 
@@ -184,7 +184,9 @@ where $mu$ is the overall intercept, $beta$ represents fixed moderator effects (
 Heterogeneity was quantified using the multilevel $I^2$ framework of Nakagawa & Santos @seniorHeterogeneityEcologicalEvolutionary2016; @nakagawaOrchaRd20Package2023:
 $ I^2_("total") = frac(sigma^2_("study") + sigma^2_("species") + sigma^2_("phylo"), sigma^2_("study") + sigma^2_("species") + sigma^2_("phylo") + macron(v)) $
 
-Publication bias was examined using multilevel extensions of Egger's regression @eggerBiasMetaanalysisDetected1997; @nakagawaMethodsTestingPublication2022 and residual funnel plots.
+where $macron(v)$ is the typical sampling variance computed with inverse-variance weights $w_i = 1 slash v_i$. The original dissertation used $w_i = 1 slash sqrt(v_i)$, which inflates $macron(v)$; under that formulation total $I^2$ for the null model was #N.i2_total_original_2018.
+
+Small-study effects were examined using multilevel extensions of Egger's regression, adding the standard error of each effect size ($sqrt(v_i)$) as a moderator to each fitted model @eggerBiasMetaanalysisDetected1997; @nakagawaMethodsTestingPublication2022, and with funnel plots.
 
 // ── 3. Results ───────────────────────────────────────────────────────────────
 = Results
@@ -193,7 +195,7 @@ Publication bias was examined using multilevel extensions of Egger's regression 
 
 The synthesized evidence base comprises #S.w_effects effect sizes derived from #S.w_studies studies and #S.w_species fish species (@fig:prisma). Trait representations reflect the historical emphasis on gonadal morphology and sperm kinetics: Quality traits constitute #S.pct_quality ($k = #S.n_quality$), Production traits #S.pct_production ($k = #S.n_production$, partitioned into #S.n_gsi GSI and #S.n_quantity sperm count measures), and behavioral Allocation represents #S.pct_allocation ($k = #S.n_allocation$).
 
-Eight effect sizes (#S.n_extreme_effects of #S.n_effects) exhibited extreme magnitudes ($|g| > 8$, reaching $|g| = #S.max_extreme_g$), representing potential transcription or unit-scaling artefacts in primary studies (e.g. standard errors mistaken for standard deviations). These are audited in sensitivity analyses.
+A small number of effect sizes (#S.n_extreme_effects of #S.n_effects) exhibited extreme magnitudes ($|g| > 8$, reaching $|g| = #S.max_extreme_g$), representing potential transcription or unit-scaling artefacts in primary studies (e.g. standard errors mistaken for standard deviations). These are audited in sensitivity analyses.
 
 == Trait category differences (Model 1)
 
@@ -241,7 +243,7 @@ Conversely, majors exhibited significantly greater behavioral sperm allocation p
 
 == Heterogeneity decomposition across models
 
-Partitioning variance components across model formulations (@tab:heterogeneity; @fig:heterogeneity) demonstrates that study-level environmental and methodological differences constitute the dominant source of variation across all specifications (accounting for 46.2% to 76.0% of total variance). In Model 1, trait category absorbed significant between-model variation, while species identity contributed #M1.i2_species. 
+Partitioning variance components across model formulations (@tab:heterogeneity; @fig:heterogeneity) demonstrates that study-level environmental and methodological differences constitute the dominant source of variation across all specifications (accounting for #M2.i2_study to #M1.i2_study of total variance). In Model 1, trait category absorbed significant between-model variation, while species identity contributed #M1.i2_species. 
 
 #figure(
   caption: [
@@ -285,16 +287,16 @@ Partitioning variance components across model formulations (@tab:heterogeneity; 
 
 Testing Parker's second hypothesis—that major–minor divergence peaks at intermediate sperm competition risk—Model 2 evaluated the interaction between trait categories and the five-level sperm competition rank (SCR) proposed by Stockley et al. @stockleySpermCompetitionFishes1997. 
 
-Within each trait category, the major–minor difference did not vary systematically across sperm competition ranks (#M2.conclusion). However, methodological scrutiny indicates that this null result is strongly constrained by data architecture: SCR is a species-level invariant, and in the available fish literature, the extreme ranks rest on single species (SCR 1 = _Gobius niger_ only; SCR 5 = _Axoclinus nigricaudus_ only).
+Restricted to observational studies and excluding allocation ($k = #M2.k$), allowing effects to differ among sperm competition ranks within trait categories significantly improved model fit relative to trait category alone (likelihood-ratio test: $chi^2 = #M2.lrt_chi2$, df $= #M2.lrt_df$, $P #M2.lrt_p$). This omnibus test does not by itself indicate the intermediate-risk peak predicted by Parker, and it is strongly constrained by data architecture: SCR is a species-level invariant, and in the available fish literature, the extreme ranks rest on single species (SCR 1 = _Gobius niger_ only; SCR 5 = _Axoclinus nigricaudus_ only).
 
 == Publication bias diagnostics
 
-Residual funnel plots (@fig:funnel) showed symmetrical distribution of effect sizes around the pooled estimate for standard errors below 0.8. Multilevel Egger regression intercepts did not deviate significantly from zero for the null model ($t = #PB.egger_null$, $P #PB.all_p$), Model 1 ($t = #PB.egger_m1$, $P #PB.all_p$), or Model 2 ($t = #PB.egger_m2$, $P #PB.all_p$). 
+The funnel plot (@fig:funnel) was asymmetric, with less precise estimates spread more widely and predominantly towards positive values. Multilevel Egger regressions detected significant small-study effects: the slope of effect size on standard error was positive in the null model (#PB.null.slope, $z = #PB.null.z$, $P #PB.null.p$), Model 1 (#PB.model1.slope, $z = #PB.model1.z$, $P #PB.model1.p$) and Model 2 (#PB.model2.slope, $z = #PB.model2.z$, $P #PB.model2.p$). Pooled estimates should therefore be interpreted with caution; sensitivity analyses adjusting for small-study effects are planned for the updated synthesis. 
 
 #figure(
   image("figures/fig4_funnel_plot.png", width: 85%),
   caption: [
-    *Funnel plot of effect sizes (Hedges' $g$) against precision (SE).* Dashed lines denote pseudo-95% confidence intervals around zero. Outliers ($|g| > 6$, red triangles) are audited in sensitivity analyses.
+    *Funnel plot of effect sizes (Hedges' $g$) against precision (SE).* Dashed lines denote pseudo-95% confidence intervals around zero. Extreme effects ($|g| > 8$, red triangles) are drawn at the plot edge and audited in sensitivity analyses.
   ],
 ) <fig:funnel>
 

@@ -24,15 +24,17 @@ Every number in the manuscript—every table cell, model estimate, confidence in
 
 ---
 
-## Key findings (baseline synthesis, 50 studies, 29 species, 183 effect sizes)
+## Key findings (baseline synthesis, 48 studies, 29 species, 183 effect sizes)
 
 | Direction | Trait category | Hedges' $g$ (95% CI) | Interpretation |
 |---|---|---|---|
-| ↑ **Favours Majors** | **Allocation** | **+2.732 (+1.476 to +3.989)** | Majors allocate significantly more sperm per spawning act |
-| ↓ **Favours Minors** | **Production / GSI** | **−2.638 (−3.105 to −2.177)** | Minors invest dramatically more in relative gonad size |
-| ~ Indeterminate | Production / Quantity | −0.384 (−0.845 to +0.076) | Small non-significant trend towards minors (CI spans zero) |
+| ↑ **Favours Majors** | **Allocation** | **+2.733 (+1.476 to +3.990)** | Majors allocate significantly more sperm per spawning act |
+| ↓ **Favours Minors** | **Production / GSI** | **−2.638 (−3.105 to −2.172)** | Minors invest dramatically more in relative gonad size |
+| ~ Indeterminate | Production / Quantity | −0.385 (−0.845 to +0.076) | Small non-significant trend towards minors (CI spans zero) |
 | ~ Indeterminate | Quality | −0.251 (−0.699 to +0.197) | Small non-significant trend towards minors (CI spans zero) |
-| ~ Indeterminate | Overall (Null Model) | −0.519 (−1.317 to +0.278) | Pooled mean overlaps zero ($I^2 = 83.21\%$) |
+| ~ Indeterminate | Overall (Null Model) | −0.522 (−1.325 to +0.280) | Pooled mean overlaps zero ($I^2 = 93.39\%$) |
+
+Estimates are refitted by `analysis/01_baseline_models.R` from the exact effect sizes and sampling variances in the original 2018 extraction spreadsheet. Multilevel Egger regressions show significant small-study effects in all models, so pooled means should be read with caution.
 
 *Sign convention:* Positive Hedges' $g$ denotes larger values in **majors**; negative $g$ denotes larger values in **minors**.
 
@@ -72,11 +74,14 @@ sperm_competition_meta/
 ├── data/
 │   ├── input/
 │   │   ├── delmatto2018_supp_table1.csv # Raw 207 rows extracted from dissertation PDF
+│   │   ├── delmatto2018_original/       # Original 2018 extraction sheet (exact g, v) and fish trees
 │   │   └── dougherty2022_all_data.xlsx  # Archived Figshare dataset from Dougherty et al. (2022)
 │   └── output/
 │       ├── delmatto2018_reconciled.csv  # Reconciled 183-effect baseline dataset
 │       └── openalex_update_candidates.csv # 468 candidate records (2017–2026) for screening
-└── analysis/                         # Extended R scripts and analytical notebooks
+└── analysis/
+    ├── 01_baseline_models.R          # Refits the 2018 baseline models → build/model_results.json
+    └── original_2018/                # Archived 2018 R Markdown analysis (Del Matto & Santos)
 ```
 
 ---
@@ -104,13 +109,16 @@ python3 scripts/reconcile_dissertation_data.py
 # Step 2: (Optional) Harvest latest literature via OpenAlex REST API
 python3 scripts/fetch_openalex.py
 
-# Step 3: Compute statistics, format display strings, and write build/results.json
+# Step 3: Refit the baseline models in R (writes build/model_results.json, build/effect_sizes.csv)
+Rscript analysis/01_baseline_models.R
+
+# Step 4: Format display strings and write build/results.json
 python3 scripts/build_results.py
 
-# Step 4: Regenerate all publication figures (300 DPI)
+# Step 5: Regenerate all publication figures (300 DPI)
 python3 scripts/figures.py
 
-# Step 5: Compile the Typst manuscript to PDF
+# Step 6: Compile the Typst manuscript to PDF
 typst compile manuscript.typ manuscript.pdf
 ```
 
@@ -122,6 +130,7 @@ The original work is an unpublished MSc dissertation:
 > Del Matto, L. A. (2018). *Sperm competition games between majors and minors: a meta-regression of fishes with alternative mating tactics.* Dissertação de Mestrado, Instituto de Biociências, Universidade de São Paulo. Supervisor: Eduardo S. A. Santos.
 
 Key provenance and reconciliation details:
+- **Original analysis files recovered:** The 2018 analysis repository (`meta-analysis-Lygia`) is archived in `data/input/delmatto2018_original/` and `analysis/original_2018/`. Its extraction spreadsheet matches Supplementary Table 1 row for row and adds exact sampling variances, study IDs, trait sub-categories, study design and setting, and morph body sizes. Two corrections to the original script are applied: inverse-variance weights in the typical sampling variance for $I^2$, and a multilevel Egger test on the slope.
 - **Supplementary Table 1 discrepancy resolved:** The original appendix records 207 rows. Programmatically excluding the 24 absolute gonad mass rows (dropped in the original Methods as non-independent of GSI) yields exactly the reported **183 effect sizes** (65 production = 31 GSI + 34 quantity; 107 quality; 11 allocation). Fully verified in `scripts/reconcile_dissertation_data.py`.
 - **Three-way cross-synthesis reconciliation:** Directly compares Del Matto (2018) with the broad-taxa meta-analysis by Dougherty et al. (2022, *Biological Reviews*; 92 animal studies, 58 fishes). Identifies 31 shared teleost studies, audits 19 teleost studies in Del Matto missed by Dougherty (including key behavioral allocation papers), and integrates 27 teleost studies unique to Dougherty.
 - **Resolving the GSI allometry controversy:** Dougherty et al. argued that higher minor testes mass is a GSI ratio artifact, but dropped GSI entirely. Our update fits continuous bivariate allometric meta-regressions with body mass and dimorphism, testing whether disproportionate gonadal investment survives proper scaling.
